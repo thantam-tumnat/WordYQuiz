@@ -72,7 +72,9 @@ func main() {
 
 	logs.Info("Quiz service started at port " + viper.GetString("app.port"))
 
-	app.Listen(":8000")
+	if err := app.Listen(":" + viper.GetString("app.port")); err != nil {
+		panic(err)
+	}
 
 }
 
