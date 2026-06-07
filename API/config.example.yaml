@@ -1,0 +1,13 @@
+# ตัวอย่าง config — คัดลอกไฟล์นี้เป็น config.yaml แล้วใส่ค่าจริงของคุณ
+#   cp config.example.yaml config.yaml
+# config.yaml ถูก gitignore ไว้ จะไม่ถูก push ขึ้น repo (กันรหัสผ่านหลุด)
+app:
+  port: 8000
+
+db:
+  driver: "postgresql"
+  host: "localhost"
+  port: 5432
+  username: "postgres"
+  password: "CHANGE_ME"
+  database: "setup"

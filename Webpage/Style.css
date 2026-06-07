@@ -9,54 +9,35 @@
 	margin: 50px auto 0 auto;
 	max-width: 400px;
 }
-h1 {
-	right: 20px;
-    background-image: url('logo.png');
-    background-size: contain;
-    width: 500px;
-    height: 350px;
-    text-indent: -9999px;
-    margin: auto; /* Add this line */
-    /* Add this line */
-}
-.image-container {
-	right:50px
-    width: 450px; /* Set width of the container */
-    height: 350px; /* Set height of the container */
-    background-image: url('logo.png'); /* Set the path to your image */
-    background-size: cover; /* Adjust the image size */
-    background-position: center; /* Center the image */
-}
+
 #top {
 	color: red;
 }
 
 .containerNew {
-	background-color: white;
-	border: 2px solid;
+	//border: 2px solid;
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	height: 580px;
-	width: 75%;
+	width: 50%;
 	transform: translate(-50%, -50%);
-	padding: 150px;
+	padding: 10px;
 }
 
 p {
 	margin: 15px 15px;
-	text-align: center;
 }
 
-body {
-    font-size: 25px;
-	background-color:#6799af;
-}
 .landing {
 	text-align: center;
 }
 
-
+.scoresHeader {
+	position: absolute;
+	bottom: 15px;
+	left: 0px;
+}
 
 .timer {
 	position: absolute;
@@ -64,96 +45,19 @@ body {
 	right: 15px;
 }
 
-.button {
-	background-color: #6799af; /* Green */
-	border: none;
-	color: white;
-	padding: 16px 32px;
-	text-align: center;
-	text-decoration: none;
+button {
 	display: inline-block;
-	font-size: 16px;
-	margin: 4px 2px;
-	transition-duration: 0.4s;
+	margin: 10px;
 	cursor: pointer;
-  }
-  
-  .button1 {
-	height: 100px;
-    width: 700px;
-	margin-top: 10px;
-  	margin-bottom: 10px;
-	background-color: white; 
-	color: black; 
-	border: 2px solid #008CBA;
-  }
-  
-.button2 {
-	height: 100px;
-    width: 700px;
-	margin-top: 10px;
-  	margin-bottom: 10px;
-	background-color: white; 
-	color: black; 
-	border: 2px solid #008CBA;
-  }
-  
-  .button2:hover {
-	background-color: #008CBA;
-	color: white;
-  }
-  
-  .button3 {
-	height: 100px;
-    width: 700px;
-	margin-top: 10px;
-  	margin-bottom: 10px;
-	background-color: white; 
-	color: black; 
-	border: 2px solid #f44336;
-  }
-  
-  .button3:hover {
-	background-color: #f44336;
-	color: white;
-  }
-  .button4 {
-	height: 100px;
-    width: 700px;
-	margin-top: 10px;
-  	margin-bottom: 10px;
-	background-color: white;
-	color: black;
-	border: 2px solid #fff30e;
-  }
-  
-  .button4:hover {background-color: #e7e7e7;}
-  
-  
-
-
-
-
-.scores-header {
-	position: fixed; /* Set position to fixed */
-    top: 0px; /* Set distance from the top */
-    left: 0px; /* Set distance from the left */
+	color: #fff;
+	background-color: #6799af;
 	border-radius: 5px;
 	border: 0;
 	padding: 20px;
-    color: #fff;
-    background-color: #6799af;
-}
-.scores-try {
-	border-radius: 5px;
-	border: 0;
-	padding: 20px;
-    color: #fff;
-    background-color: #6799af;
+	
 }
 
 button:hover {
-	color: #fff;
 	background-color: #6799af;
 }
 
@@ -162,7 +66,7 @@ button:hover {
 }
 
 input[type="text"] {
-	font-size: 150%;
+	font-size: 100%;
 }
 
 .hide {
@@ -188,50 +92,10 @@ li {
 	padding: 5px;
 	list-style: decimal inside none;
 }
-.slider-container {
-    position: fixed;
-    bottom: 60px;
-    right: 500px;
-    padding: 20px;
-    z-index: 1000;
-    background-color: #fff;
-}
-
-.slider {
-    position: fixed;
-	bottom: 60px;
-    right:150px;
-    -webkit-appearance: none;
-    appearance: none;
-    width: 250px; /* Adjust width as needed */
-    height: 10px; /* Adjust height as needed */
-    background: #d3d3d3;
-    outline: none;
-    opacity: 0.7;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
-}
-
-.slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 20px; /* Adjust thumb width as needed */
-    height: 20px; /* Adjust thumb height as needed */
-    background: #0d548b;
-    cursor: pointer;
-}
-
-.slider::-moz-range-thumb {
-    width: 20px; /* Adjust thumb width as needed */
-    height: 20px; /* Adjust thumb height as needed */
-    background: #4CAF50;
-    cursor: pointer;
-}
 
 li:nth-child(odd) {
 	background-color: #dfdae7;
 }
-
 @media screen and (max-width: 1920px) {
 	.containerNew {
 		width: 80%;

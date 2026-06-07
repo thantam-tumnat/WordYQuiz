@@ -1,6 +1,5 @@
 // script.js
-// Call the function initially to set default font size
-//updateFontSize();
+//let mergedData = [];
 let questions = [
 	{
 		prompt: `Inside which HTML 
@@ -85,8 +84,9 @@ let mergedData = [
         "definition": "orange thing"
     }
 ];
-let newSize = 0
+
 // Get Dom Elements
+
 let questionsEl =
 	document.querySelector(
 		"#questions"
@@ -113,20 +113,17 @@ let buttonOfchoices = document.querySelector("value");
 
 // Quiz's initial state
 let currentQuestionIndex = 0;
-let time = 12;
+let time = 15;
 let timerId;
 
 // Start quiz and hide frontpage
 
 async function quizStart() {
-	let nameInput;
-	updateFontSize();
 	timerId = setInterval(
 		clockTick,
 		1000
 	);
 	timerEl.textContent = time;
-	nameEl.textContent = nameInput;
 	let landingScreenEl =
 		document.getElementById(
 			"start-screen"
@@ -183,7 +180,6 @@ function getRandomNumber1to4() {
   return Math.floor(Math.random() * 3) + 1;
 }
 
-const currentFontSize = window.getComputedStyle(document.body).getPropertyValue('font-size');
 
 async function getQuestion() {
 	await fetchAndMergeJSON();
@@ -211,7 +207,7 @@ async function getQuestion() {
 		
 			let choiceBtn =
 				document.createElement(
-					"button" 
+					"button"
 				);
 			choiceBtn.setAttribute(
 				"value",
@@ -219,17 +215,13 @@ async function getQuestion() {
 			);
 			choiceBtn.textContent =
 				parseInt(i) + parseInt("1") + ". " + mergedData[i].word;
-			choiceBtn.style.fontSize = currentFontSize;
 			choiceBtn.onclick =
 				questionClick;
-			choiceBtn.classList.add("button"+ (parseInt(i) + 1));
-			console.log(i)
 			choicesEl.appendChild(
 				choiceBtn
 			);
-			
+		
 	  }		
-	  updateFontSize();
 	  console.log("merged data afer get question === ");
 	  console.log(mergedData);
 }
@@ -246,76 +238,73 @@ const delay = (delayInms) => {
 // Time for wrong answer, go to next question
 var score = 0;
 var round = 0;
-let streakCount = 0; // Variable to track the current streak count
-let streakMultiplier = 1; // Initial streak multiplier
-let streakBonusTimerId; // Timer ID for streak bonus timer
-let streakBonusTime = 8; // Time limit for streak bonus (in seconds)
-
 async function questionClick() {
-    // Reset the streak bonus timer if it's already running
-    clearTimeout(streakBonusTimerId);
+	if (
+		this.value !== // if value(answer) of the clicked button doesnt match with the index
+		// it will end the quiz
+		mergedData[currentQuestionIndex]
+			.word
+	) {
+		/*if (round == 0) {
+			score = 0;
+		}*/
+		console.log("currentQuestionIndex ====" + currentQuestionIndex);
+		console.log("this.value ==== " + this.value);
+		console.log("answer ====" + mergedData[currentQuestionIndex]
+		.word);
+		console.log(mergedData);
+		console.log("json second = " + mergedData[0].word);
+		
+		if (time < 0) {
+			time = 0;
+		}
+		console.log("value isssssssssssssss " + this.value);
+		//clickedButton = document.getElementById(this.value)
 
-    updateFontSize();
+		timerEl.textContent = time;
+		feedbackEl.textContent = `Wrong! The correct answer was 
+		${mergedData[currentQuestionIndex].word}.`;
+		feedbackEl.style.color = "red";
+		//choiceButtons.style.color = "red"; //ทำให้ปุ่มที่กดเป็นสีแดงถ้าผิด
+		feedbackEl.setAttribute(
+			"class",
+			"feedback"
+		);
+		let delayres = await delay(2000);
+		quizEnd();
+		//buttonOfchoices.style.color = "red";
+		
+	} else {
+		feedbackEl.textContent =
+			"Correct! +" + time;
+			score = score + time;
+			time = 12;
+		feedbackEl.style.color =
+			"green";
 
-    if (this.value !== mergedData[currentQuestionIndex].word) {
-        // Player answered incorrectly
-
-        // Reset streak count and multiplier
-        streakCount = 0;
-        streakMultiplier = 1;
-
-        if (time < 0) {
-            time = 0;
-        }
-
-        timerEl.textContent = time;
-        feedbackEl.textContent = `Wrong! The correct answer was ${mergedData[currentQuestionIndex].word}.`;
-        feedbackEl.style.color = "red";
-        feedbackEl.setAttribute("class", "feedback");
-
-        let delayres = await delay(2000);
-        quizEnd();
-    } else {
-        // Player answered correctly
-
-        // Increment the streak count
-        streakCount++;
-
-        // Check if the streak count is a multiple of 3 to activate streak bonus
-        if (streakCount % 3 === 0) {
-            // Multiply the streak bonus by 2
-            streakMultiplier *= 2;
-
-            // Start the streak bonus timer
-            streakBonusTimerId = setTimeout(() => {
-                // Reset the streak bonus timer when time's up
-                streakMultiplier = 1;
-                streakCount = 0;
-            }, streakBonusTime * 1000); // Convert seconds to milliseconds
-
-            // Show streak bonus message or indication to the player
-            console.log(`Streak Bonus Activated! ${streakMultiplier}x Multiplier`);
-        }
-
-        // Calculate the score including streak bonus
-        score = score + time * streakMultiplier;
-        time = 12; // Reset time for the next question
-
-        feedbackEl.textContent = "Correct! +" + time * streakMultiplier; // Update feedback message with streak bonus
-        feedbackEl.style.color = "green";
-        feedbackEl.setAttribute("class", "feedback");
-
-        // Hide the feedback message after a delay
-        setTimeout(function () {
-            feedbackEl.setAttribute("class", "feedback hide");
-        }, 2000);
-    }
-
-    // Proceed to the next question
-    let delayres = await delay(500);
-    getQuestion();
+			feedbackEl.setAttribute(
+				"class",
+				"feedback"
+			);
+	}
+	setTimeout(function () {
+		feedbackEl.setAttribute(
+			"class",
+			"feedback hide"
+		);
+	}, 2000);
+	round = round+1;
+	/*if (
+		round ===
+		questions.length
+	) {
+		quizEnd();
+	} else {*/
+	let delayres = await delay(500);
+	
+		getQuestion();
+	//}
 }
-
 
 // End quiz by hiding questions,
 // Stop timer and show final score
@@ -352,7 +341,7 @@ function clockTick() {
 
 // Save score in local storage
 // Along with users' name
-/*
+
 function saveHighscore() {
 	let name = nameEl.value.trim();
 	if (name !== "") {
@@ -375,73 +364,7 @@ function saveHighscore() {
 			"Your Score has been Submitted"
 		);
 	}
-}*/
-// Save score in local storage
-// Along with users' name
-
-async function saveHighscore() {
-	updateFontSize();
-    //let name = nameEl.value.trim();
-	//name = document.getElementById("name").value;
-	/*alert(typeof nameInput)
-	alert(nameInput !== "")*/
-	let nameInput = document.getElementById("name").value;
-	
-    if (nameInput !== "") {
-        try {
-            // Fetch the latest ID
-            const response = await fetch('http://127.0.0.1:8000/score');
-            if (!response.ok) {
-                throw new Error('Failed to fetch latest ID');
-            }
-            const data = await response.json();
-            
-            // Find the latest ID
-            let latestId = 0;
-            if (data.length > 0) {
-				// lastest id
-                latestId = data[data.length - 1].id;
-            }
-            
-            // Increment the latest ID by 1
-            const newId = latestId + 1;
-            
-            // Create data object containing name and score along with the new ID
-            const postData = {
-                id: newId,
-                player_name: nameInput,
-                score: score
-            };
-			//alert("postdataName = " + postData.name);
-            // Send POST request with the new ID
-            const postResponse = await fetch(`http://127.0.0.1:8000/score/${newId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(postData)
-            });
-
-            if (postResponse.ok) {
-                // Optionally, you can handle a successful submission here
-                console.log("Score submitted successfully!");
-                alert("Your score has been submitted.");
-            } else {
-                // Handle error response
-                console.error("Error submitting score:", postResponse.statusText);
-                alert("Failed to submit score.");
-            }
-        } catch (error) {
-            // Handle network errors
-            console.error("Error:", error);
-            alert("Failed to submit score.");
-        }
-    } else {
-		alert("Please enter your name");
-	}
 }
-
-
 
 // Save users' score after pressing enter
 
@@ -462,21 +385,3 @@ submitBtn.onclick = saveHighscore;
 // Start quiz after clicking start quiz
 
 startBtn.onclick = quizStart;
-
-
-function updateFontSize() {
-    newSize = fontSlider.value + "px";
-    const textElements = document.querySelectorAll("*");
-    textElements.forEach(element => {
-        if (element.nodeType === Node.TEXT_NODE) {
-            element.parentNode.style.fontSize = newSize;
-        } else {
-            element.style.fontSize = newSize;
-        }
-    });
-}
-
-// Add event listener to slider input event
-fontSlider.addEventListener("input", updateFontSize);
-
-

@@ -1,0 +1,18 @@
+# Python virtualenv (accidentally committed before)
+API/.venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Real config with DB credentials (use config.example.yaml as template)
+API/config.yaml
+
+# Go build artifacts
+*.exe
+API/API
+API/api
+API/main
+
+# Editor / OS
+.DS_Store
+Thumbs.db

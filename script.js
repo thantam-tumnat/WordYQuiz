@@ -265,14 +265,12 @@ async function questionClick() {
 		feedbackEl.textContent = `Wrong! The correct answer was 
 		${mergedData[currentQuestionIndex].word}.`;
 		feedbackEl.style.color = "red";
-		let delayress = await delay(100);
 		//choiceButtons.style.color = "red"; //ทำให้ปุ่มที่กดเป็นสีแดงถ้าผิด
 		feedbackEl.setAttribute(
 			"class",
 			"feedback"
 		);
-		let delayres = await delay(1500);
-		 " ";
+		let delayres = await delay(2000);
 		quizEnd();
 		//buttonOfchoices.style.color = "red";
 		
@@ -294,10 +292,15 @@ async function questionClick() {
 			"class",
 			"feedback hide"
 		);
-	}, 500);
+	}, 2000);
 	round = round+1;
-	} else {
-	//let delayres = await delay(500);
+	/*if (
+		round ===
+		questions.length
+	) {
+		quizEnd();
+	} else {*/
+	let delayres = await delay(500);
 	
 		getQuestion();
 	//}
@@ -307,7 +310,6 @@ async function questionClick() {
 // Stop timer and show final score
 
 function quizEnd() {
-	feedbackEl.textContent = ` `;
 	clearInterval(timerId);
 	let endScreenEl =
 		document.getElementById(

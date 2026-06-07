@@ -1,69 +1,88 @@
+<!--index.html-->
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./style.css" />
-    <title>Code Quiz</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport"
+		content="width=device-width,
+				initial-scale=1.0" />
+	<link rel="stylesheet"
+		href="./style.css" />
+	<title>Code Quiz</title>
 </head>
 
 <body>
-    <div class="square-frame-container">
-        <div class="containerNew">
-            <header>
-                <div>
-                    <a href="./highscore.html" class="scores-header">
-                        View High Scores
-                    </a>
-                </div>
+	<div class="containerNew">
+		<header>
+			<div>
+				<a href="./highscore.html">
+					<button class="scores-header"
+							id="view-high-scores">
+						View High Scores
+					</button>
+				</a>
+			</div>
 
-                <div class="timer">
-                    <p>
-                        Time:
-                        <span id="timer">0</span>
-                    </p>
-                </div>
-            </header>
+			<div class="timer">
+				<p>
+					Time:
+					<span id="timer">
+						0
+					</span>
+				</p>
+			</div>
+		</header>
 
-            <main class="quiz">
-                <div id="quiz-start">
-                    <div class="landing" id="start-screen">
-                        <div class="image-container"></div>
-                        <h3  style="font-size: 25px;"></h3>
-                        <p></p>
-						<button id="start" class="button" style="font-size: 30px";>Start Quiz</button>
-                    </div>
-                </div>
+		<main class="quiz">
+			<div id="quiz-start">
+				<div class="landing"
+					id="start-screen">
+					<h1 id="top">
+						WordYQuiz
+					</h1>
+					<h1>
+						Volcabulary Quiz Challenge
+					</h1>
+					<p>
+						
+					</p>
+					<button id="start">
+						Start Quiz
+					</button>
+				</div>
+			</div>
 
-                <div class="hide" id="questions">
-                    <h2 id="question-words"></h2>
-                    <div class="options" id="options"></div>
-                </div>
+			<div class="hide" id="questions">
+				<h2 id="question-words"></h2>
+				<div class="options" id="options">
+				</div>
+			</div>
 
-                <div class="hide" id="quiz-end">
-                    <h2>All Done!</h2>
-                    <p ">Your final score is: <span id="score-final"></span></p>
-                    <p ">
-                        Please enter your name:
-                        <input type="text" id="name" max="3" />
-                        <button id="submit-score">Submit</button>
-                        <a href="./index.html">
-                            <button class="scores-try" >Try again</button>
-                        </a>
-                    </p>
-                </div>
+			<div class="hide" id="quiz-end">
+				<h2>All Done!</h2>
+				<p>Your final score is:
+					<span id="score-final">
+					</span>
+				</p>
+				<p>
+					Please enter your name:
+					<input type="text"
+						id="name"
+						max="3" />
+					<button id="submit-score">
+						Submit
+					</button>
+				</p>
+			</div>
 
-                <div id="feedback" class="feedback hide"></div>
-            </main>
-        </div>
-    </div>
-
-    <div class="slider-container">
-        <input type="range" min="20" max="50" value="16" class="slider" id="fontSlider"">
-    </div>
-
-    <script src="./script.js"></script>
+			<div id="feedback"
+				class="feedback hide">
+			</div>
+		</main>
+	</div>
+	<script src="./script.js"></script>
 </body>
 
 </html>
