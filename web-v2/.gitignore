@@ -1,0 +1,8 @@
+node_modules
+dist
+dist-ssr
+*.local
+.vite
+
+# local env (machine-specific API port) — use .env.example as template
+.env
