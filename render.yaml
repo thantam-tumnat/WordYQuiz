@@ -1,0 +1,26 @@
+# Render Blueprint — deploy Go Fiber backend
+# วิธีใช้: Render → New → Blueprint → เลือก repo นี้ → กรอกค่า env ที่ sync:false
+services:
+  - type: web
+    name: wordyquiz-api
+    runtime: docker
+    repo: https://github.com/thantam-tumnat/WordYQuiz
+    rootDir: API
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: singapore
+    healthCheckPath: /volcabs
+    envVars:
+      # ค่าจาก Supabase (Connection Pooler) — กรอกในหน้า Render (ไม่ commit ลง git)
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: "6543"
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_DATABASE
+        value: postgres
+      - key: DB_SSLMODE
+        value: require

@@ -1,6 +1,10 @@
 # ตัวอย่าง config — คัดลอกไฟล์นี้เป็น config.yaml แล้วใส่ค่าจริงของคุณ
 #   cp config.example.yaml config.yaml
 # config.yaml ถูก gitignore ไว้ จะไม่ถูก push ขึ้น repo (กันรหัสผ่านหลุด)
+#
+# หมายเหตุ: บน cloud (Render/Cloud Run) ไม่ต้องมีไฟล์นี้ — แอปอ่านจาก
+# environment variables แทน: APP_PORT, DB_HOST, DB_PORT, DB_USERNAME,
+# DB_PASSWORD, DB_DATABASE, DB_SSLMODE
 app:
   port: 8000
 
@@ -11,3 +15,4 @@ db:
   username: "postgres"
   password: "CHANGE_ME"
   database: "setup"
+  sslmode: "disable" # local docker = disable · Supabase/Neon = require

@@ -6,6 +6,7 @@ import (
 	"core_sustain/repository"
 	"core_sustain/service"
 	"fmt"
+	"os"
 	"strings"
 	"time"
 
@@ -70,9 +71,15 @@ func main() {
 	app.Delete("/score/:id", HighScoreHandler.DeleteHighScore)
 	app.Put("/score/:id", HighScoreHandler.UpdateHighScore)
 
-	logs.Info("Quiz service started at port " + viper.GetString("app.port"))
+	// $PORT (Render/Cloud Run กำหนด) มาก่อนเสมอ ไม่งั้นใช้ app.port จาก config/default
+	port := viper.GetString("app.port")
+	if p := os.Getenv("PORT"); p != "" {
+		port = p
+	}
 
-	if err := app.Listen(":" + viper.GetString("app.port")); err != nil {
+	logs.Info("Quiz service started at port " + port)
+
+	if err := app.Listen(":" + port); err != nil {
 		panic(err)
 	}
 
@@ -82,12 +89,25 @@ func initConfig() {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".")
-	viper.AutomaticEnv()
-	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 
-	err := viper.ReadInConfig()
-	if err != nil {
-		panic(err)
+	// อ่านจาก environment variables: APP_PORT, DB_HOST, DB_PORT, DB_USERNAME, ...
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+	viper.AutomaticEnv()
+	// Render/Cloud Run ส่งพอร์ตที่ต้อง listen มาทาง $PORT
+	viper.BindEnv("app.port", "PORT")
+
+	// ค่าเริ่มต้น (ใช้เมื่อไม่มีทั้งไฟล์และ env)
+	viper.SetDefault("app.port", "8000")
+	viper.SetDefault("db.port", "5432")
+	viper.SetDefault("db.sslmode", "disable")
+
+	// ตอน dev จะมี config.yaml; บน cloud ไม่มีไฟล์ → ใช้ env แทน (ไม่ panic)
+	if err := viper.ReadInConfig(); err != nil {
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			fmt.Println("no config.yaml found — using environment variables")
+		} else {
+			panic(err)
+		}
 	}
 }
 
@@ -102,12 +122,13 @@ func initTimeZone() {
 }
 
 func initDatabase() *gorm.DB {
-	dsn := fmt.Sprintf("host=%v port=%v user=%v password=%v dbname=%v",
+	dsn := fmt.Sprintf("host=%v port=%v user=%v password=%v dbname=%v sslmode=%v",
 		viper.GetString("db.host"),
 		viper.GetInt("db.port"),
 		viper.GetString("db.username"),
 		viper.GetString("db.password"),
 		viper.GetString("db.database"),
+		viper.GetString("db.sslmode"), // disable=local docker · require=Supabase/Neon
 	)
 	dial := postgres.Open(dsn)
 
