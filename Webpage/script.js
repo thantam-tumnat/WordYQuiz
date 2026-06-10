@@ -144,7 +144,7 @@ async function quizStart() {
 async function fetchAndMergeJSON() {
     //const mergedData = [];
     for (let i = 0; i <= 3; i++) {
-      const url = `http://localhost:8000/volcabs/${getRandomNumberInRange(10)}`;
+      const url = `http://localhost:8088/volcabs/${getRandomNumberInRange(10)}`;
       try {
         const response = await fetch(url);
         const data = await response.json();

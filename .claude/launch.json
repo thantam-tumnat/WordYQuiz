@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "frontend",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "5500"],
+      "port": 5500
+    },
+    {
+      "name": "web-v2",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "web-v2", "run", "dev"],
+      "port": 5173
+    }
+  ]
+}
