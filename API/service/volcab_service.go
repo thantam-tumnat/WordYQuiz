@@ -17,9 +17,11 @@ func NewVolcabService(volcabRepo repository.VolcabtRepository) VolcabService {
 
 func (s volcabService) NewVolcab(volcabID int, request NewVolcabRequest) (*VolcabResponse, error) {
 	volcab := repository.Volcab{
-		ID:         volcabID,
-		Word:       request.Word,
-		Definition: request.Definition,
+		ID:           volcabID,
+		Word:         request.Word,
+		Definition:   request.Definition,
+		PartOfSpeech: request.PartOfSpeech,
+		Level:        request.Level,
 	}
 
 	newVolcab, err := s.volcabRepo.CreateVolcab(volcab)
@@ -29,9 +31,11 @@ func (s volcabService) NewVolcab(volcabID int, request NewVolcabRequest) (*Volca
 	}
 
 	response := VolcabResponse{
-		ID:         volcabID,
-		Word:       newVolcab.Word,
-		Definition: newVolcab.Definition,
+		ID:           volcabID,
+		Word:         newVolcab.Word,
+		Definition:   newVolcab.Definition,
+		PartOfSpeech: newVolcab.PartOfSpeech,
+		Level:        newVolcab.Level,
 	}
 	return &response, nil
 }
@@ -47,9 +51,11 @@ func (s volcabService) GetVolcabByID(volcabID int) (*VolcabResponse, error) {
 	}
 
 	response := VolcabResponse{
-		ID:         volcab.ID,
-		Word:       volcab.Word,
-		Definition: volcab.Definition,
+		ID:           volcab.ID,
+		Word:         volcab.Word,
+		Definition:   volcab.Definition,
+		PartOfSpeech: volcab.PartOfSpeech,
+		Level:        volcab.Level,
 	}
 
 	return &response, nil
@@ -65,9 +71,11 @@ func (s volcabService) GetVolcabs() ([]VolcabResponse, error) {
 	response := make([]VolcabResponse, 0, len(volcabs))
 	for _, volcab := range volcabs {
 		response = append(response, VolcabResponse{
-			ID:         volcab.ID,
-			Word:       volcab.Word,
-			Definition: volcab.Definition,
+			ID:           volcab.ID,
+			Word:         volcab.Word,
+			Definition:   volcab.Definition,
+			PartOfSpeech: volcab.PartOfSpeech,
+			Level:        volcab.Level,
 		})
 	}
 	return response, nil
@@ -75,9 +83,11 @@ func (s volcabService) GetVolcabs() ([]VolcabResponse, error) {
 
 func (s volcabService) UpdateVolcab(volcabID int, request NewVolcabRequest) (*VolcabResponse, error) {
 	volcab := repository.Volcab{
-		ID:         volcabID,
-		Word:       request.Word,
-		Definition: request.Definition,
+		ID:           volcabID,
+		Word:         request.Word,
+		Definition:   request.Definition,
+		PartOfSpeech: request.PartOfSpeech,
+		Level:        request.Level,
 	}
 
 	updatedVolcab, err := s.volcabRepo.UpdateVolcab(volcabID, volcab)
@@ -87,9 +97,11 @@ func (s volcabService) UpdateVolcab(volcabID int, request NewVolcabRequest) (*Vo
 	}
 
 	response := VolcabResponse{
-		ID:         updatedVolcab.ID,
-		Word:       updatedVolcab.Word,
-		Definition: updatedVolcab.Definition,
+		ID:           updatedVolcab.ID,
+		Word:         updatedVolcab.Word,
+		Definition:   updatedVolcab.Definition,
+		PartOfSpeech: updatedVolcab.PartOfSpeech,
+		Level:        updatedVolcab.Level,
 	}
 	return &response, nil
 }
