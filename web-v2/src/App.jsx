@@ -145,7 +145,7 @@ export default function App() {
           )}
         </AnimatePresence>
       </div>
-      <footer className="credit">WordYQuiz 2.0 · React + Go Fiber</footer>
+      {/* <footer className="credit">WordYQuiz 2.0 · React + Go Fiber</footer> */}
     </div>
   )
 }

@@ -14,9 +14,9 @@ export default function StartScreen({ loading, error, count, total, onStart }) {
 
       <h1 className="title">
         Word<span className="title-accent">Y</span>Quiz
-        <span className="title-badge">2.0</span>
+        {/*<span className="title-badge">2.0</span>*/}
       </h1>
-      <p className="subtitle">ทดสอบคำศัพท์ — ตอบถูกต่อเนื่องเพื่อจุดไฟ streak ให้ลุกโชน</p>
+      <p className="subtitle">ควิซคำศัพท์ Oxford 3000</p>
 
       {loading && <p className="hint pulse">กำลังโหลดคลังคำศัพท์…</p>}
 
@@ -60,7 +60,7 @@ export default function StartScreen({ loading, error, count, total, onStart }) {
           >
             เริ่มเล่น · {count} ข้อ
           </motion.button>
-          <p className="hint">มีคำศัพท์ในคลังทั้งหมด {total} คำ</p>
+          <p className="hint">OXFORD 3000</p>
         </>
       )}
     </div>
