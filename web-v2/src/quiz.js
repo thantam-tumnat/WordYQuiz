@@ -39,7 +39,12 @@ export function buildQuestions(volcabs, count = 10) {
   })
 }
 
-// คะแนนต่อข้อ: ฐาน 100 + โบนัสตาม streak (ยิ่งติดไฟยิ่งได้เยอะ)
-export function pointsFor(streak) {
-  return 100 + Math.max(0, streak - 1) * 25
+// ---- Kahoot-style scoring ----
+// ยิ่งตอบเร็ว ยิ่งได้เยอะ + streak combo bonus
+export const TIME_LIMIT = 10 // วินาทีต่อข้อ
+
+export function pointsFor(streak, timeLeft) {
+  const timeScore = Math.round(1000 * (timeLeft / TIME_LIMIT))
+  const streakBonus = Math.min(Math.max(streak - 1, 0), 5) * 100
+  return timeScore + streakBonus
 }

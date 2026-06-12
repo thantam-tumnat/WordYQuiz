@@ -10,9 +10,13 @@ export default function QuizScreen({
   score,
   streak,
   fireLevel,
+  timeLeft,
+  timeLimit,
   onAnswer,
   onNext,
 }) {
+  const timerPct = (timeLeft / timeLimit) * 100
+  const timerColor = timeLeft > 5 ? 'ok' : timeLeft >= 3 ? 'warn' : 'danger'
   const [picked, setPicked] = useState(null)
   const [locked, setLocked] = useState(false)
 
@@ -75,6 +79,18 @@ export default function QuizScreen({
         />
       </div>
 
+      {/* ---- countdown timer ---- */}
+      <div className="timer">
+        <div className="timer-bar">
+          <motion.div
+            className={`timer-fill ${timerColor}`}
+            animate={{ width: `${timerPct}%` }}
+            transition={{ duration: 1, ease: 'linear' }}
+          />
+        </div>
+        <span className={`timer-num ${timerColor}`}>{timeLeft}</span>
+      </div>
+
       {/* ---- question word ---- */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -93,7 +109,7 @@ export default function QuizScreen({
             )}
           </h2>
           {streak >= 1 && (
-            <span className="bonus-tag">+{pointsFor(streak + 1)} ถ้าตอบถูก</span>
+            <span className="bonus-tag">+{pointsFor(streak + 1, timeLeft)} ถ้าตอบถูก</span>
           )}
         </motion.div>
       </AnimatePresence>

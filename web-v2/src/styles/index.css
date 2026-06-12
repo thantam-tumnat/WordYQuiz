@@ -172,6 +172,27 @@ body {
   border-radius: 999px;
 }
 
+/* countdown timer */
+.timer { display: flex; align-items: center; gap: 10px; }
+.timer-bar {
+  flex: 1; height: 8px; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08); overflow: hidden;
+}
+.timer-fill {
+  height: 100%; border-radius: 999px;
+  transition: background 0.3s;
+}
+.timer-fill.ok   { background: var(--good); }
+.timer-fill.warn { background: var(--fire-1); }
+.timer-fill.danger { background: var(--bad); animation: pulse 0.5s ease-in-out infinite; }
+.timer-num {
+  font-size: 18px; font-weight: 800; min-width: 28px; text-align: center;
+  transition: color 0.3s;
+}
+.timer-num.ok    { color: var(--good); }
+.timer-num.warn  { color: var(--fire-1); }
+.timer-num.danger { color: var(--bad); }
+
 /* ---------------- fire streak widget ---------------- */
 .firestreak { position: relative; display: flex; align-items: center; gap: 10px; padding: 0 6px; }
 .flame { line-height: 1; }

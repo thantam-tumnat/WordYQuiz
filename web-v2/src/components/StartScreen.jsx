@@ -38,15 +38,21 @@ export default function StartScreen({ loading, error, count, total, onStart }) {
               </span>
             </div>
             <div className="rule">
+              <span className="rule-ico">⏱️</span>
+              <span>
+                จับเวลา <b>10 วินาที</b>ต่อข้อ — ยิ่งตอบเร็วยิ่งได้<b>คะแนนเยอะ</b>
+              </span>
+            </div>
+            <div className="rule">
               <span className="rule-ico">🔥</span>
               <span>
-                ตอบถูกติดกัน = <b>ไฟแรงขึ้น</b> และได้โบนัสคะแนนเพิ่ม
+                ตอบถูกติดกัน = <b>streak bonus</b> คะแนนพิเศษเพิ่มขึ้นเรื่อย ๆ
               </span>
             </div>
             <div className="rule">
               <span className="rule-ico">💧</span>
               <span>
-                ตอบผิด = <b>ไฟดับ</b> streak กลับเป็นศูนย์
+                ตอบผิดหรือหมดเวลา = <b>ไฟดับ</b> streak กลับเป็นศูนย์
               </span>
             </div>
           </div>

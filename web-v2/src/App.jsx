@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { getVolcabs } from './api'
-import { buildQuestions, pointsFor } from './quiz'
+import { buildQuestions, pointsFor, TIME_LIMIT } from './quiz'
 import StartScreen from './components/StartScreen'
 import QuizScreen from './components/QuizScreen'
 import ResultScreen from './components/ResultScreen'
@@ -22,6 +22,7 @@ export default function App() {
   const [streak, setStreak] = useState(0)
   const [bestStreak, setBestStreak] = useState(0)
   const [correctCount, setCorrectCount] = useState(0)
+  const [timeLeft, setTimeLeft] = useState(TIME_LIMIT)
 
   useEffect(() => {
     let alive = true
@@ -48,23 +49,9 @@ export default function App() {
     setStreak(0)
     setBestStreak(0)
     setCorrectCount(0)
+    setTimeLeft(TIME_LIMIT)
     setStage('playing')
   }, [volcabs])
-
-  const handleAnswer = useCallback(
-    (isCorrect) => {
-      if (isCorrect) {
-        const next = streak + 1
-        setStreak(next)
-        setBestStreak((b) => Math.max(b, next))
-        setScore((sc) => sc + pointsFor(next))
-        setCorrectCount((c) => c + 1)
-      } else {
-        setStreak(0)
-      }
-    },
-    [streak]
-  )
 
   const handleNext = useCallback(() => {
     setIndex((i) => {
@@ -76,6 +63,45 @@ export default function App() {
       return next
     })
   }, [questions.length])
+
+  // ---- countdown timer ----
+  // รีเซ็ต timer ทุกครั้งที่เปลี่ยนข้อ
+  useEffect(() => {
+    if (stage !== 'playing') return
+    setTimeLeft(TIME_LIMIT)
+  }, [index, stage])
+
+  // นับถอยหลังทุกวินาที
+  useEffect(() => {
+    if (stage !== 'playing') return
+    if (timeLeft <= 0) return
+    const id = setInterval(() => setTimeLeft((t) => t - 1), 1000)
+    return () => clearInterval(id)
+  }, [stage, timeLeft])
+
+  // หมดเวลา → นับเป็นผิด + ข้ามข้อ
+  useEffect(() => {
+    if (stage !== 'playing') return
+    if (timeLeft > 0) return
+    setStreak(0)
+    handleNext()
+  }, [timeLeft, stage, handleNext])
+
+  const handleAnswer = useCallback(
+    (isCorrect) => {
+      if (isCorrect) {
+        const next = streak + 1
+        setStreak(next)
+        setBestStreak((b) => Math.max(b, next))
+        setScore((sc) => sc + pointsFor(next, timeLeft))
+        setCorrectCount((c) => c + 1)
+      } else {
+        setStreak(0)
+      }
+    },
+    [streak, timeLeft]
+  )
+
 
   const fireLevel = Math.min(streak, 6) // 0..6 ระดับความแรงของไฟ
 
@@ -119,6 +145,8 @@ export default function App() {
                 score={score}
                 streak={streak}
                 fireLevel={fireLevel}
+                timeLeft={timeLeft}
+                timeLimit={TIME_LIMIT}
                 onAnswer={handleAnswer}
                 onNext={handleNext}
               />
