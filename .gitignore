@@ -7,6 +7,9 @@ __pycache__/
 # Real config with DB credentials (use config.example.yaml as template)
 API/config.yaml
 
+# Real compose with DB credentials (use docker-compose.example.yml as template)
+docker-compose.yml
+
 # Go build artifacts
 *.exe
 API/API

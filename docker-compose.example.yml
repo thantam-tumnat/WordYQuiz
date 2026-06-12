@@ -1,0 +1,50 @@
+# WordYQuiz — local dev stack
+#
+# ใช้กับ "กรณีที่ 1 (Local)" ใน SETUP.md
+#   docker compose up -d            # รัน DB อย่างเดียว (seed อัตโนมัติครั้งแรก)
+#   docker compose --profile full up -d --build   # รัน DB + Go backend ทั้งชุด
+#   docker compose down             # หยุด (ข้อมูลยังอยู่ใน volume)
+#   docker compose down -v          # หยุด + ลบข้อมูล (seed ใหม่รอบหน้า)
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: wordyquiz-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: changeme      # ← แก้รหัสผ่านตามต้องการ
+      POSTGRES_DB: setup
+    ports:
+      - "5432:5432"
+    volumes:
+      - wordyquiz-data:/var/lib/postgresql/data
+      # seed.sql รันอัตโนมัติ "ครั้งแรกที่ volume ยังว่าง" (สร้าง volcabs + high_scores + ใส่ข้อมูล)
+      - ./db/seed.sql:/docker-entrypoint-initdb.d/seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d setup"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Go Fiber backend — รันเฉพาะเมื่อใส่ --profile full
+  api:
+    profiles: ["full"]
+    build: ./API
+    container_name: wordyquiz-api
+    environment:
+      # โค้ดอ่าน env เหล่านี้แทน config.yaml (ดู API/main.go: initConfig)
+      DB_HOST: db                      # ชื่อ service ใน compose network
+      DB_PORT: "5432"
+      DB_USERNAME: postgres
+      DB_PASSWORD: changeme            # ← ต้องตรงกับ POSTGRES_PASSWORD ด้านบน
+      DB_DATABASE: setup
+      DB_SSLMODE: disable              # ต่อ DB ในเครือข่าย local = ไม่ต้อง SSL
+      APP_PORT: "8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  wordyquiz-data:
