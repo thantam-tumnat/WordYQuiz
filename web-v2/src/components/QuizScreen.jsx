@@ -86,7 +86,12 @@ export default function QuizScreen({
           transition={{ duration: 0.3 }}
         >
           <span className="question-eyebrow">คำศัพท์นี้แปลว่าอะไร?</span>
-          <h2 className="question-word">{question.word}</h2>
+          <h2 className="question-word">
+            {question.word}
+            {question.partOfSpeech && (
+              <span className="question-pos">({question.partOfSpeech})</span>
+            )}
+          </h2>
           {streak >= 1 && (
             <span className="bonus-tag">+{pointsFor(streak + 1)} ถ้าตอบถูก</span>
           )}

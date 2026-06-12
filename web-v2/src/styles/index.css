@@ -201,6 +201,10 @@ body {
   background: linear-gradient(120deg, #fff, #d9c9ff);
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
+.question-pos {
+  margin-left: 10px; font-size: 0.4em; font-weight: 600; vertical-align: middle;
+  color: var(--muted); -webkit-text-fill-color: var(--muted);
+}
 .bonus-tag {
   font-size: 12px; font-weight: 700; color: #2a0f06; padding: 4px 10px; border-radius: 999px;
   background: linear-gradient(120deg, var(--fire-1), var(--fire-2));

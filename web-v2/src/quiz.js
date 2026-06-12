@@ -16,15 +16,23 @@ export function buildQuestions(volcabs, count = 10) {
 
   return picked.map((correct) => {
     // ดึงคำแปลลวง (ไม่ซ้ำกับคำตอบที่ถูก) มา 3 ตัว
-    const distractors = shuffle(
-      pool.filter((v) => v.id !== correct.id && v.definition !== correct.definition)
+    // เลือก part of speech เดียวกันก่อน จะได้เดาจากชนิดคำไม่ได้ ถ้าไม่พอค่อยสุ่มทั่วไป
+    const others = pool.filter(
+      (v) => v.id !== correct.id && v.definition !== correct.definition
     )
+    const samePos = others.filter(
+      (v) => correct.partOfSpeech && v.partOfSpeech === correct.partOfSpeech
+    )
+    const rest = others.filter((v) => !samePos.includes(v))
+    const distractors = [...shuffle(samePos), ...shuffle(rest)]
       .slice(0, 3)
       .map((v) => v.definition)
 
     const choices = shuffle([correct.definition, ...distractors])
     return {
       word: correct.word,
+      partOfSpeech: correct.partOfSpeech,
+      level: correct.level,
       answer: correct.definition,
       choices,
     }

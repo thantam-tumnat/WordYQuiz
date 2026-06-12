@@ -11,6 +11,8 @@ export async function getVolcabs() {
       id: v.id,
       word: (v.word || '').trim(),
       definition: (v.definition || '').trim(),
+      partOfSpeech: (v.part_of_speech || '').trim(),
+      level: (v.level || '').trim(),
     }))
     .filter((v) => v.word && v.definition)
 }
