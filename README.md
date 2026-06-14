@@ -9,6 +9,18 @@
 
 ---
 
+## Tech Stack
+
+| ชั้น | เทคโนโลยี |
+|------|-----------|
+| **Frontend 2.0** | React 18 · Vite · framer-motion (อนิเมชัน) · CSS (glassmorphism) |
+| **Backend** | Go 1.20 · [Fiber](https://gofiber.io/) v2 · [GORM](https://gorm.io/) · [Viper](https://github.com/spf13/viper) (config) · [Zap](https://github.com/uber-go/zap) (logging) |
+| **Database** | PostgreSQL |
+| **Clean Architecture** | REST API แบ่งชั้น handler → service → repository |
+| **Deployment** | Supabase(Database) + Render(Backend) + Vercel(Frontend) |
+
+--- 
+
 ## 📸 WordYQuiz 2.0
 
 <p align="center">
@@ -20,24 +32,12 @@
 
 ---
 
-## 🧱 Tech Stack
+## ฟีเจอร์เวอร์ชัน 2.0
 
-| ชั้น | เทคโนโลยี |
-|------|-----------|
-| **Frontend 2.0** | React 18 · Vite · framer-motion (อนิเมชัน) · CSS (glassmorphism) |
-| **Frontend 1.0** | HTML5 · CSS3 · Vanilla JavaScript (`fetch`) |
-| **Backend** | Go 1.20 · [Fiber](https://gofiber.io/) v2 · [GORM](https://gorm.io/) · [Viper](https://github.com/spf13/viper) (config) · [Zap](https://github.com/uber-go/zap) (logging) |
-| **Database** | PostgreSQL |
-| **สถาปัตยกรรม** | REST API แบ่งชั้น handler → service → repository |
-
----
-
-## ✨ ฟีเจอร์เด่น (2.0)
-
-- 🎯 โจทย์ = คำศัพท์ · 4 ตัวเลือก = คำแปลที่สุ่มมา (1 ถูก + 3 ลวง)
-- 🔥 **ระบบ streak ติดไฟ** — เปลวไฟโต/เรืองแสงตามจำนวนตอบถูกติดกัน, อนุภาคไฟลอยพื้นหลัง, พื้นหลังเรืองแดง, โบนัสคะแนนเพิ่มทุก streak
-- 💧 ตอบผิด = ไฟดับ streak กลับเป็นศูนย์
-- 🏆 หน้าสรุปผล: ความแม่นยำ + streak สูงสุด + บันทึกคะแนนลง DB + กระดานอันดับ
+- โจทย์ = คำศัพท์ · 4 ตัวเลือก = คำแปลที่สุ่มมา (1 ถูก + 3 ลวง)
+- **ระบบ streak ติดไฟ** — เปลวไฟโต/เรืองแสงตามจำนวนตอบถูกติดกัน, อนุภาคไฟลอยพื้นหลัง, พื้นหลังเรืองแดง, โบนัสคะแนนเพิ่มทุก streak
+- ตอบผิด = ไฟดับ streak กลับเป็นศูนย์
+- หน้าสรุปผล: ความแม่นยำ + streak สูงสุด + บันทึกคะแนนลง DB + กระดานอันดับ
 
 ---
 
