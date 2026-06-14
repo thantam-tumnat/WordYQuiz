@@ -1,6 +1,6 @@
 # Guideline to  Deploy WordYQuiz on Internet
 
-สถาปัตยกรรม: **React (Vercel)** → **Go Fiber (Render)** → **Postgres (Supabase)**
+Architecture: **React (Vercel)** → **Go Fiber (Render)** → **Postgres (Supabase)**
 
 
        word-y-quiz.vercel.app → wordyquiz.onrender.com → Supabase Postgres
@@ -18,7 +18,7 @@
 | 3. เช็ก | **Table Editor** → ต้องเห็นตาราง `volcabs` (15 แถว) + `high_scores` |
 | 4. เอาค่าต่อ DB | ปุ่ม **Connect** (บนสุด) → แท็บ **Direct** → ส่วน **Transaction pooler** (port 6543) |
 
-**ค่าที่ได้จาก Connect → Transaction pooler** (กล่องล่างแยกให้ครบ):
+**ค่าที่ได้จาก Connect → Transaction pooler**:
 ```
 postgresql://postgres.uhzvfggnilehvfhxnxmf:[PASSWORD]@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres
               └──────── user ───────────┘            └──────────── host ─────────────────┘  └port┘ └db┘
@@ -59,13 +59,13 @@ postgresql://postgres.uhzvfggnilehvfhxnxmf:[PASSWORD]@aws-1-ap-southeast-1.poole
 no config.yaml found — using environment variables   ← อ่าน env แทนไฟล์ (ถูก) ** ถ้า deploy local บน docker จะดึงจาก config.yaml แทน ตาม function init() ใน main.go
 connected db as  postgres                            ← ต่อ Supabase ผ่าน 
 Quiz service started at port 10000                   ← ฟัง $PORT ของ Render
-==> Your service is live 🎉
+==> Your service is live 
 ```
 
 ### ทดสอบ
 เปิด `https://<ชื่อ service>.onrender.com/volcabs` → ต้องเห็น JSON 15 คำศัพท์
 
-> Free tier sleep หลังไม่มีคนใช้ 15 นาที → คำขอแรกหลังตื่นช้า ~30-50 วิ (ปกติ)
+> Supabase Free Tier จะ sleep ถ้าไม่มีคนใช้ 15 นาที ถ้าเปิดใหม่ต้องรอ 30-50 วิ
 
 ---
 
