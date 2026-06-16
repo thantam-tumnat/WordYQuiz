@@ -62,6 +62,9 @@ let questions = [
 	},
 ];
 
+const API_BASE = "https://wordyquiz.onrender.com";
+let allVolcabs = [];
+
 let mergedData = [
     {
         "id": 1,
@@ -141,23 +144,42 @@ async function quizStart() {
 
 
 
+async function fetchAllVolcabs() {
+	if (allVolcabs.length > 0) return;
+	try {
+		const response = await fetch(`${API_BASE}/volcabs`);
+		if (!response.ok) {
+			console.error("GET /volcabs failed with status:", response.status);
+			return;
+		}
+		const data = await response.json();
+		if (!Array.isArray(data)) {
+			console.error("GET /volcabs returned non-array data:", data);
+			return;
+		}
+		allVolcabs = data
+			.map(v => ({
+				id: v.id,
+				word: (v.word || '').trim(),
+				definition: (v.definition || '').trim(),
+				partOfSpeech: (v.part_of_speech || '').trim(),
+				level: (v.level || '').trim(),
+			}))
+			.filter(v => v.word && v.definition);
+	} catch (error) {
+		console.error("Error fetching volcabs:", error);
+	}
+}
+
 async function fetchAndMergeJSON() {
-    //const mergedData = [];
-    for (let i = 0; i <= 3; i++) {
-      const url = `http://localhost:8088/volcabs/${getRandomNumberInRange(10)}`;
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
-        mergedData[i] = data;
-      } catch (error) {
-        console.error(`Error fetching ${url}:`, error);
-      }
-    }
-    console.log("merged data before getQuestion");
-	console.log(mergedData);
-    console.log("json first = " + mergedData[0].word); // Print the merged JSON data
-    //console.log(questions);
-  }
+	await fetchAllVolcabs();
+	if (allVolcabs.length < 4) {
+		console.error("Not enough vocabulary items");
+		return;
+	}
+	let shuffled = [...allVolcabs].sort(() => 0.5 - Math.random());
+	mergedData = shuffled.slice(0, 4);
+}
   
   
 
@@ -342,27 +364,24 @@ function clockTick() {
 // Save score in local storage
 // Along with users' name
 
-function saveHighscore() {
+async function saveHighscore() {
 	let name = nameEl.value.trim();
 	if (name !== "") {
-		let highscores =
-			JSON.parse(
-				window.localStorage.getItem(
-					"highscores"
-				)
-			) || [];
-		let newScore = {
-			score: time,
-			name: name,
-		};
-		highscores.push(newScore);
-		window.localStorage.setItem(
-			"highscores",
-			JSON.stringify(highscores)
-		);
-		alert(
-			"Your Score has been Submitted"
-		);
+		try {
+			const res = await fetch(`${API_BASE}/score`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ player_name: name, score: String(score) }),
+			});
+			if (res.ok) {
+				alert("Your Score has been Submitted");
+			} else {
+				alert("Failed to submit score");
+			}
+		} catch (error) {
+			console.error("Error saving highscore:", error);
+			alert("Error submitting score");
+		}
 	}
 }
 
@@ -371,9 +390,6 @@ function saveHighscore() {
 function checkForEnter(event) {
 	if (event.key === "Enter") {
 		saveHighscore();
-		alert(
-			"Your Score has been Submitted"
-		);
 	}
 }
 nameEl.onkeyup = checkForEnter;
