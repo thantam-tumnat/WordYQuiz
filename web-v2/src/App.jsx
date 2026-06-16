@@ -23,6 +23,8 @@ export default function App() {
   const [bestStreak, setBestStreak] = useState(0)
   const [correctCount, setCorrectCount] = useState(0)
   const [timeLeft, setTimeLeft] = useState(TIME_LIMIT)
+  const [isEndless, setIsEndless] = useState(false)
+  const [lastCorrect, setLastCorrect] = useState(true)
 
   useEffect(() => {
     let alive = true
@@ -42,8 +44,10 @@ export default function App() {
     }
   }, [])
 
-  const start = useCallback(() => {
-    setQuestions(buildQuestions(volcabs, QUESTION_COUNT))
+  const start = useCallback((endless = false) => {
+    setIsEndless(endless)
+    setLastCorrect(true)
+    setQuestions(buildQuestions(volcabs, endless ? 100 : QUESTION_COUNT))
     setIndex(0)
     setScore(0)
     setStreak(0)
@@ -54,15 +58,25 @@ export default function App() {
   }, [volcabs])
 
   const handleNext = useCallback(() => {
+    if (isEndless && !lastCorrect) {
+      setStage('result')
+      return
+    }
     setIndex((i) => {
       const next = i + 1
+      if (isEndless) {
+        if (next >= questions.length) {
+          setQuestions((prev) => [...prev, ...buildQuestions(volcabs, 10)])
+        }
+        return next
+      }
       if (next >= questions.length) {
         setStage('result')
         return i
       }
       return next
     })
-  }, [questions.length])
+  }, [questions.length, isEndless, lastCorrect, volcabs])
 
   // ---- countdown timer ----
   // รีเซ็ต timer ทุกครั้งที่เปลี่ยนข้อ
@@ -84,11 +98,13 @@ export default function App() {
     if (stage !== 'playing') return
     if (timeLeft > 0) return
     setStreak(0)
+    setLastCorrect(false)
     handleNext()
   }, [timeLeft, stage, handleNext])
 
   const handleAnswer = useCallback(
     (isCorrect) => {
+      setLastCorrect(isCorrect)
       if (isCorrect) {
         const next = streak + 1
         setStreak(next)
@@ -149,6 +165,7 @@ export default function App() {
                 timeLimit={TIME_LIMIT}
                 onAnswer={handleAnswer}
                 onNext={handleNext}
+                isEndless={isEndless}
               />
             </motion.div>
           )}
@@ -164,7 +181,7 @@ export default function App() {
             >
               <ResultScreen
                 score={score}
-                total={questions.length}
+                total={isEndless ? index + 1 : questions.length}
                 correctCount={correctCount}
                 bestStreak={bestStreak}
                 onRestart={() => setStage('start')}

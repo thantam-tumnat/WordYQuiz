@@ -57,15 +57,31 @@ export default function StartScreen({ loading, error, count, total, onStart }) {
             </div>
           </div>
 
-          <motion.button
-            className="btn btn-primary"
-            onClick={onStart}
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
-            disabled={count === 0}
-          >
-            เริ่มเล่น · {count} ข้อ
-          </motion.button>
+          <div className="start-actions" style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%' }}>
+            <motion.button
+              className="btn btn-primary"
+              onClick={() => onStart(false)}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              disabled={count === 0}
+            >
+              Start
+            </motion.button>
+            <motion.button
+              className="btn btn-secondary"
+              onClick={() => onStart(true)}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              disabled={count === 0}
+              style={{
+                background: 'linear-gradient(135deg, #ff9f43 0%, #ff5252 100%)',
+                color: '#fff',
+                border: 'none'
+              }}
+            >
+              Endless mode
+            </motion.button>
+          </div>
           <p className="hint">OXFORD 3000</p>
         </>
       )}

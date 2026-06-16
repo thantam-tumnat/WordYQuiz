@@ -14,6 +14,7 @@ export default function QuizScreen({
   timeLimit,
   onAnswer,
   onNext,
+  isEndless,
 }) {
   const timerPct = (timeLeft / timeLimit) * 100
   const timerColor = timeLeft > 5 ? 'ok' : timeLeft >= 3 ? 'warn' : 'danger'
@@ -44,7 +45,7 @@ export default function QuizScreen({
     return 'dim'
   }
 
-  const progress = ((index + (locked ? 1 : 0)) / total) * 100
+  const progress = isEndless ? 0 : ((index + (locked ? 1 : 0)) / total) * 100
 
   return (
     <div className="quiz">
@@ -53,7 +54,7 @@ export default function QuizScreen({
         <div className="hud-left">
           <span className="hud-label">ข้อ</span>
           <span className="hud-value">
-            {index + 1}<span className="hud-sub">/{total}</span>
+            {index + 1}<span className="hud-sub">{isEndless ? ' / ♾️' : `/${total}`}</span>
           </span>
         </div>
         <FireStreak streak={streak} level={fireLevel} />
