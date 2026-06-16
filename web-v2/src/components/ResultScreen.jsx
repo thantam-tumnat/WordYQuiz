@@ -9,6 +9,7 @@ export default function ResultScreen({ score, total, correctCount, bestStreak, o
   const [scores, setScores] = useState([])
   const [err, setErr] = useState(null)
   const [viewMode, setViewMode] = useState(isEndless ? 'endless' : 'normal')
+  const [visibleCount, setVisibleCount] = useState(8)
 
   const loadScores = (modeToLoad) =>
     getHighScores(modeToLoad)
@@ -16,7 +17,8 @@ export default function ResultScreen({ score, total, correctCount, bestStreak, o
         const sorted = [...rows].sort(
           (a, b) => (parseInt(b.score) || 0) - (parseInt(a.score) || 0)
         )
-        setScores(sorted.slice(0, 8))
+        setScores(sorted.slice(0, 25))
+        setVisibleCount(8)
       })
       .catch((e) => setErr(e.message))
 
@@ -37,6 +39,15 @@ export default function ResultScreen({ score, total, correctCount, bestStreak, o
       setErr(e.message)
     } finally {
       setSaving(false)
+    }
+  }
+
+  const handleScroll = (e) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget
+    if (scrollHeight - scrollTop <= clientHeight + 5) {
+      if (visibleCount < scores.length) {
+        setVisibleCount((prev) => Math.min(prev + 8, 25))
+      }
     }
   }
 
@@ -121,8 +132,8 @@ export default function ResultScreen({ score, total, correctCount, bestStreak, o
         </div>
         {err && <p className="hint">โหลดอันดับไม่ได้: {err}</p>}
         {scores.length === 0 && !err && <p className="hint">ยังไม่มีคะแนน</p>}
-        <ol className="lb-list">
-          {scores.map((s, i) => (
+        <ol className="lb-list" onScroll={handleScroll}>
+          {scores.slice(0, visibleCount).map((s, i) => (
             <li key={s.id ?? i} className={`lb-item ${i === 0 ? 'lb-top' : ''}`}>
               <span className="lb-rank">{i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}</span>
               <span className="lb-name">{s.player_name}</span>

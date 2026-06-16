@@ -7,6 +7,7 @@ export default function LeaderboardScreen({ onBack }) {
   const [scores, setScores] = useState([])
   const [loading, setLoading] = useState(false)
   const [err, setErr] = useState(null)
+  const [visibleCount, setVisibleCount] = useState(8)
 
   const loadScores = (modeToLoad) => {
     setLoading(true)
@@ -16,7 +17,8 @@ export default function LeaderboardScreen({ onBack }) {
         const sorted = [...rows].sort(
           (a, b) => (parseInt(b.score) || 0) - (parseInt(a.score) || 0)
         )
-        setScores(sorted.slice(0, 8))
+        setScores(sorted.slice(0, 25))
+        setVisibleCount(8)
       })
       .catch((e) => setErr(e.message))
       .finally(() => setLoading(false))
@@ -25,6 +27,15 @@ export default function LeaderboardScreen({ onBack }) {
   useEffect(() => {
     loadScores(viewMode)
   }, [viewMode])
+
+  const handleScroll = (e) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget
+    if (scrollHeight - scrollTop <= clientHeight + 5) {
+      if (visibleCount < scores.length) {
+        setVisibleCount((prev) => Math.min(prev + 8, 25))
+      }
+    }
+  }
 
   return (
     <div className="card result-card">
@@ -55,8 +66,8 @@ export default function LeaderboardScreen({ onBack }) {
         )}
 
         {!loading && !err && scores.length > 0 && (
-          <ol className="lb-list">
-            {scores.map((s, i) => (
+          <ol className="lb-list" onScroll={handleScroll}>
+            {scores.slice(0, visibleCount).map((s, i) => (
               <li key={s.id ?? i} className={`lb-item ${i === 0 ? 'lb-top' : ''}`}>
                 <span className="lb-rank">
                   {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}
