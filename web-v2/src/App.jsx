@@ -185,6 +185,7 @@ export default function App() {
                 correctCount={correctCount}
                 bestStreak={bestStreak}
                 onRestart={() => setStage('start')}
+                isEndless={isEndless}
               />
             </motion.div>
           )}
