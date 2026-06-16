@@ -142,7 +142,7 @@ func initDatabase() *gorm.DB {
 	if err != nil {
 		panic(err)
 	}
-	err = db.AutoMigrate(&repository.Volcab{})
+	err = db.AutoMigrate(&repository.Volcab{}, &repository.HighScore{})
 	if err != nil {
 		panic(err)
 	}

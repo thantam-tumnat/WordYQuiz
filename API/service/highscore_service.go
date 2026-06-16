@@ -20,6 +20,7 @@ func (s highscoreService) NewHighScore(highscoreID int, request NewHighScoreRequ
 		ID:         highscoreID,
 		PlayerName: request.PlayerName,
 		Score:      request.Score,
+		Mode:       request.Mode,
 	}
 
 	newHighScore, err := s.highscoreRepo.CreateHighScore(highscore)
@@ -32,6 +33,7 @@ func (s highscoreService) NewHighScore(highscoreID int, request NewHighScoreRequ
 		ID:         highscoreID,
 		PlayerName: newHighScore.PlayerName,
 		Score:      newHighScore.Score,
+		Mode:       newHighScore.Mode,
 	}
 	return &response, nil
 }
@@ -50,13 +52,14 @@ func (s highscoreService) GetHighScoreByID(highscoreID int) (*HighScoreResponse,
 		ID:         highscore.ID,
 		PlayerName: highscore.PlayerName,
 		Score:      highscore.Score,
+		Mode:       highscore.Mode,
 	}
 
 	return &response, nil
 }
 
-func (s highscoreService) GetHighScores() ([]HighScoreResponse, error) {
-	highscores, err := s.highscoreRepo.GetHighScores()
+func (s highscoreService) GetHighScores(mode string) ([]HighScoreResponse, error) {
+	highscores, err := s.highscoreRepo.GetHighScores(mode)
 	if err != nil {
 		logs.Error(err)
 		return nil, errs.NewUnexpectedError()
@@ -68,6 +71,7 @@ func (s highscoreService) GetHighScores() ([]HighScoreResponse, error) {
 			ID:         highscore.ID,
 			PlayerName: highscore.PlayerName,
 			Score:      highscore.Score,
+			Mode:       highscore.Mode,
 		})
 	}
 	return response, nil
@@ -78,6 +82,7 @@ func (s highscoreService) UpdateHighScore(highscoreID int, request NewHighScoreR
 		ID:         highscoreID,
 		PlayerName: request.PlayerName,
 		Score:      request.Score,
+		Mode:       request.Mode,
 	}
 
 	updatedHighScore, err := s.highscoreRepo.UpdateHighScore(highscoreID, highscore)
@@ -90,6 +95,7 @@ func (s highscoreService) UpdateHighScore(highscoreID int, request NewHighScoreR
 		ID:         updatedHighScore.ID,
 		PlayerName: updatedHighScore.PlayerName,
 		Score:      updatedHighScore.Score,
+		Mode:       updatedHighScore.Mode,
 	}
 	return &response, nil
 }

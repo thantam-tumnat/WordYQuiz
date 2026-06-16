@@ -27,9 +27,13 @@ func (r highscoreRepositoryDB) GetHighScore(highscoreID int) (*HighScore, error)
     return &highscore, nil
 }
 
-func (r highscoreRepositoryDB) GetHighScores() ([]HighScore, error) {
+func (r highscoreRepositoryDB) GetHighScores(mode string) ([]HighScore, error) {
     highscores := []HighScore{}
-    err := r.db.Order("id").Find(&highscores).Error
+    query := r.db
+    if mode != "" {
+        query = query.Where("mode = ?", mode)
+    }
+    err := query.Order("id").Find(&highscores).Error
     if err != nil {
         return nil, err
     }

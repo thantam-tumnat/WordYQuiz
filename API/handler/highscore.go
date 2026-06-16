@@ -46,7 +46,8 @@ func (h highscoreHandler) GetHighScore(c *fiber.Ctx) error {
 }
 
 func (h highscoreHandler) GetHighScores(c *fiber.Ctx) error {
-	highscores, err := h.highscoreSrv.GetHighScores()
+	mode := c.Query("mode")
+	highscores, err := h.highscoreSrv.GetHighScores(mode)
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"Error": "StatusInternalServerError [cannot GetHighScores]"})
 	}
