@@ -4,8 +4,8 @@
 ตอบถูกต่อเนื่องจะ **"ติดไฟ" (streak)** ไฟยิ่งลุกยิ่งได้โบนัสคะแนนเพิ่ม ตอบผิดไฟดับทันที
 
 โปรเจคนี้มี 2 เวอร์ชันหน้าเว็บ ที่ใช้ **backend Go Fiber ตัวเดียวกัน**:
-- **v1.0** — HTML/CSS/JS ล้วน (สร้าง 2023) [เล่น WordYQuizClassic](word-y-quiz-v1.vercel.app)
-- **v2.0** — เขียนใหม่ด้วย React (สร้าง 2026) [เล่น WordYQuiz](word-y-quiz.vercel.app)
+- **v1.0** — HTML/CSS/JS ล้วน (สร้าง 2023) [เล่น WordYQuizClassic](https://word-y-quiz-v1.vercel.app)
+- **v2.0** — เขียนใหม่ด้วย React (สร้าง 2026) [เล่น WordYQuiz](https://word-y-quiz.vercel.app)
 
 
 
