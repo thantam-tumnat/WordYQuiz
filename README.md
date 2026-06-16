@@ -7,6 +7,8 @@
 - **v1.0** — HTML/CSS/JS ล้วน (สร้าง 2023)
 - **v2.0** — เขียนใหม่ด้วย React (สร้าง 2026)
 
+[เล่นเกม](word-y-quiz.vercel.app)
+
 ---
 
 ## Tech Stack
@@ -14,7 +16,7 @@
 | ชั้น | เทคโนโลยี |
 |------|-----------|
 | **Frontend 2.0** | React 18 · Vite · framer-motion (อนิเมชัน) · CSS (glassmorphism) |
-| **Backend** | Go 1.20 · [Fiber](https://gofiber.io/) v2 · [GORM](https://gorm.io/) · [Viper](https://github.com/spf13/viper) (config) · [Zap](https://github.com/uber-go/zap) (logging) |
+| **Backend** | Go 1.20 · [Fiber](https://gofiber.io/) · [GORM](https://gorm.io/) · [Zap](https://github.com/uber-go/zap) (logging) |
 | **Database** | PostgreSQL |
 | **Clean Architecture** | REST API แบ่งชั้น handler → service → repository |
 | **Deployment** | Supabase(Database) + Render(Backend) + Vercel(Frontend) |
@@ -29,6 +31,9 @@
   <img src="web-v2/docs/screenshots/03-result.png" width="32%" alt="หน้าสรุปผล + leaderboard" />
 </p>
 
+<p align="center">
+  👉 <b><a href="https://word-y-quiz.vercel.app">ลองเล่นจริงที่นี่</a></b>
+</p>
 
 ---
 
