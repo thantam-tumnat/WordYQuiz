@@ -1,5 +1,12 @@
 // ตัวเชื่อมกับ Go Fiber backend (โปรเจคเดิม)
-const BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8000'
+// dev: fallback เป็น localhost เพื่อความสะดวก
+// prod: ถ้าลืมตั้ง VITE_API_BASE จะ throw ทันที (fail-fast) แทนที่จะเงียบๆ ไปยิง localhost
+const BASE = import.meta.env.VITE_API_BASE
+  || (import.meta.env.DEV ? 'http://localhost:8000' : undefined)
+
+if (!BASE) {
+  throw new Error('VITE_API_BASE is not set. ตั้งค่าใน Vercel Environment Variables ก่อน deploy')
+}
 
 export async function getVolcabs() {
   const res = await fetch(`${BASE}/volcabs`)
