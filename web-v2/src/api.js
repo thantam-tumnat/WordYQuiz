@@ -1,11 +1,7 @@
-// ตัวเชื่อมกับ Go Fiber backend (โปรเจคเดิม)
-// ไม่มี fallback โดยตั้งใจ (fail-fast): ถ้าไม่มี VITE_API_BASE ให้ throw ทันที
-//   - dev: เตือนว่ายังไม่ได้ตั้งค่า — คัดลอกจาก .env.example แล้วตั้ง .env ก่อน
-//   - prod (Vercel): เตือนว่าลืมตั้ง Environment Variable
 const BASE = import.meta.env.VITE_API_BASE
 
 if (!BASE) {
-  throw new Error('VITE_API_BASE is not set. คัดลอกจาก .env.example แล้วตั้งค่าก่อนรัน (บน Vercel ให้ตั้งใน Environment Variables)')
+  throw new Error('VITE_API_BASE is not set.')
 }
 
 export async function getVolcabs() {
