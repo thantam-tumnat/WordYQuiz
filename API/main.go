@@ -130,7 +130,10 @@ func initDatabase() *gorm.DB {
 		viper.GetString("db.database"),
 		viper.GetString("db.sslmode"), // disable=local docker · require=Supabase/Neon
 	)
-	dial := postgres.Open(dsn)
+	dial := postgres.New(postgres.Config{
+		DSN:                  dsn,
+		PreferSimpleProtocol: true,
+	})
 
 	db, err := gorm.Open(dial, &gorm.Config{
 		//Logger: &SqlLogger{},
