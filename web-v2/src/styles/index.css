@@ -310,6 +310,69 @@ body {
 .lb-name { flex: 1; font-weight: 600; }
 .lb-score { font-weight: 800; color: var(--fire-1); }
 
+.lb-tabs {
+  display: flex;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-brd);
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 16px;
+  width: 100%;
+}
+.lb-tab {
+  flex: 1;
+  text-align: center;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.lb-tab:hover {
+  color: #fff;
+}
+.lb-tab.active.tab-classic {
+  background: rgba(139, 92, 246, 0.25);
+  color: #fff;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+}
+.lb-tab.active.tab-endless {
+  background: rgba(255, 82, 82, 0.2);
+  color: #fff;
+  box-shadow: 0 0 15px rgba(255, 82, 82, 0.3);
+  border: 1px solid rgba(255, 82, 82, 0.4);
+}
+
+.btn-leaderboard-trigger {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 38px;
+  height: 38px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--glass-brd);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 17px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+}
+.btn-leaderboard-trigger:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 15px rgba(255, 196, 90, 0.3);
+  transform: translateY(-1px);
+}
+
 /* ---------------- embers bg ---------------- */
 .embers { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
 .ember {

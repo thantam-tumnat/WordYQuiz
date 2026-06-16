@@ -5,6 +5,7 @@ import { buildQuestions, pointsFor, TIME_LIMIT } from './quiz'
 import StartScreen from './components/StartScreen'
 import QuizScreen from './components/QuizScreen'
 import ResultScreen from './components/ResultScreen'
+import LeaderboardScreen from './components/LeaderboardScreen'
 import Embers from './components/Embers'
 
 const QUESTION_COUNT = 10
@@ -141,6 +142,7 @@ export default function App() {
                 count={Math.min(QUESTION_COUNT, volcabs.length)}
                 total={volcabs.length}
                 onStart={start}
+                onViewLeaderboard={() => setStage('leaderboard')}
               />
             </motion.div>
           )}
@@ -186,6 +188,21 @@ export default function App() {
                 bestStreak={bestStreak}
                 onRestart={() => setStage('start')}
                 isEndless={isEndless}
+              />
+            </motion.div>
+          )}
+
+          {stage === 'leaderboard' && (
+            <motion.div
+              key="leaderboard"
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -24 }}
+              transition={{ duration: 0.4 }}
+              className="stage"
+            >
+              <LeaderboardScreen
+                onBack={() => setStage('start')}
               />
             </motion.div>
           )}

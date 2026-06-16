@@ -2,7 +2,7 @@ const API_BASE = "https://wordyquiz.onrender.com";
 
 async function printHighscores() {
 	try {
-		const res = await fetch(`${API_BASE}/score`);
+		const res = await fetch(`${API_BASE}/score?mode=normal`);
 		if (!res.ok) throw new Error("Failed to fetch scores");
 		let highscores = await res.json() || [];
 		highscores.sort(function (a, b) {

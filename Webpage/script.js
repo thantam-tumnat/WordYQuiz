@@ -371,7 +371,7 @@ async function saveHighscore() {
 			const res = await fetch(`${API_BASE}/score`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ player_name: name, score: String(score) }),
+				body: JSON.stringify({ player_name: name, score: String(score), mode: "normal" }),
 			});
 			if (res.ok) {
 				alert("Your Score has been Submitted");

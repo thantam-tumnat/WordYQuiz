@@ -8,9 +8,10 @@ export default function ResultScreen({ score, total, correctCount, bestStreak, o
   const [saving, setSaving] = useState(false)
   const [scores, setScores] = useState([])
   const [err, setErr] = useState(null)
+  const [viewMode, setViewMode] = useState(isEndless ? 'endless' : 'normal')
 
-  const loadScores = () =>
-    getHighScores(isEndless ? 'endless' : 'normal')
+  const loadScores = (modeToLoad) =>
+    getHighScores(modeToLoad)
       .then((rows) => {
         const sorted = [...rows].sort(
           (a, b) => (parseInt(b.score) || 0) - (parseInt(a.score) || 0)
@@ -20,16 +21,18 @@ export default function ResultScreen({ score, total, correctCount, bestStreak, o
       .catch((e) => setErr(e.message))
 
   useEffect(() => {
-    loadScores()
-  }, [])
+    loadScores(viewMode)
+  }, [viewMode])
 
   const submit = async () => {
     if (!name.trim() || saving) return
     setSaving(true)
+    const targetMode = isEndless ? 'endless' : 'normal'
     try {
-      await postHighScore(name.trim(), score, isEndless ? 'endless' : 'normal')
+      await postHighScore(name.trim(), score, targetMode)
       setSaved(true)
-      await loadScores()
+      setViewMode(targetMode)
+      await loadScores(targetMode)
     } catch (e) {
       setErr(e.message)
     } finally {
@@ -102,12 +105,26 @@ export default function ResultScreen({ score, total, correctCount, bestStreak, o
 
       <div className="leaderboard">
         <h3 className="lb-title">🏅 อันดับคะแนนสูงสุด</h3>
+        <div className="lb-tabs">
+          <button
+            className={`lb-tab ${viewMode === 'normal' ? 'active' : ''}`}
+            onClick={() => setViewMode('normal')}
+          >
+            Classic 📝
+          </button>
+          <button
+            className={`lb-tab ${viewMode === 'endless' ? 'active' : ''}`}
+            onClick={() => setViewMode('endless')}
+          >
+            Endless ♾️
+          </button>
+        </div>
         {err && <p className="hint">โหลดอันดับไม่ได้: {err}</p>}
         {scores.length === 0 && !err && <p className="hint">ยังไม่มีคะแนน</p>}
         <ol className="lb-list">
           {scores.map((s, i) => (
             <li key={s.id ?? i} className={`lb-item ${i === 0 ? 'lb-top' : ''}`}>
-              <span className="lb-rank">{i + 1}</span>
+              <span className="lb-rank">{i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}</span>
               <span className="lb-name">{s.player_name}</span>
               <span className="lb-score">{s.score}</span>
             </li>

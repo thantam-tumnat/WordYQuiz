@@ -1,8 +1,18 @@
 import { motion } from 'framer-motion'
 
-export default function StartScreen({ loading, error, count, total, onStart }) {
+export default function StartScreen({ loading, error, count, total, onStart, onViewLeaderboard }) {
   return (
     <div className="card start-card">
+      <motion.button
+        className="btn-leaderboard-trigger"
+        onClick={onViewLeaderboard}
+        whileHover={{ scale: 1.1, rotate: 6 }}
+        whileTap={{ scale: 0.9 }}
+        title="ดูอันดับคะแนนสูงสุด"
+      >
+        🏆
+      </motion.button>
+
       <motion.div
         className="logo-flame"
         initial={{ scale: 0.6, rotate: -8, opacity: 0 }}
