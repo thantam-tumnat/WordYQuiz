@@ -15,9 +15,9 @@ CREATE TABLE IF NOT EXISTS volcabs (
     level           TEXT
 );
 
--- กรณีตารางเก่ามีอยู่แล้ว (สร้างก่อนเพิ่มคอลัมน์)
-ALTER TABLE volcabs ADD COLUMN IF NOT EXISTS part_of_speech TEXT;
-ALTER TABLE volcabs ADD COLUMN IF NOT EXISTS level TEXT;
+
+ALTER TABLE volcabs ADD COLUMN IF NOT EXISTS part_of_speech TEXT; -- เพิ่มคอลัมน์ part_of_speech ถ้ายังไม่มี
+ALTER TABLE volcabs ADD COLUMN IF NOT EXISTS level TEXT; -- เพิ่มคอลัมน์ level ถ้ายังไม่มี
 
 -- ---------- ตารางคะแนนสูงสุด ----------
 CREATE TABLE IF NOT EXISTS high_scores (
