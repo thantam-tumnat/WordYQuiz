@@ -1,10 +1,10 @@
 package main
 
 import (
-	"core_sustain/handler"
-	"core_sustain/logs"
-	"core_sustain/repository"
-	"core_sustain/service"
+	"wordyquiz/handler"
+	"wordyquiz/logs"
+	"wordyquiz/repository"
+	"wordyquiz/service"
 	"fmt"
 	"os"
 	"strings"

@@ -1,4 +1,4 @@
-module core_sustain
+module wordyquiz
 
 go 1.20
 

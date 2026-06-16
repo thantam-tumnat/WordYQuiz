@@ -1,9 +1,9 @@
 package service
 
 import (
-	"core_sustain/errs"
-	"core_sustain/logs"
-	"core_sustain/repository"
+	"wordyquiz/errs"
+	"wordyquiz/logs"
+	"wordyquiz/repository"
 	"database/sql"
 )
 

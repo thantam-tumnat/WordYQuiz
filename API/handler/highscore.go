@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"core_sustain/service"
+	"wordyquiz/service"
 	"encoding/json"
 	"fmt"
 	"net/http"
