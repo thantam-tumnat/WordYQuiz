@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { getHighScores, postHighScore } from '../api'
 
-export default function ResultScreen({ score, total, correctCount, bestStreak, onRestart }) {
+export default function ResultScreen({ score, total, correctCount, bestStreak, onRestart, isEndless }) {
   const [name, setName] = useState('')
   const [saved, setSaved] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -10,7 +10,7 @@ export default function ResultScreen({ score, total, correctCount, bestStreak, o
   const [err, setErr] = useState(null)
 
   const loadScores = () =>
-    getHighScores()
+    getHighScores(isEndless ? 'endless' : 'normal')
       .then((rows) => {
         const sorted = [...rows].sort(
           (a, b) => (parseInt(b.score) || 0) - (parseInt(a.score) || 0)
@@ -27,7 +27,7 @@ export default function ResultScreen({ score, total, correctCount, bestStreak, o
     if (!name.trim() || saving) return
     setSaving(true)
     try {
-      await postHighScore(name.trim(), score)
+      await postHighScore(name.trim(), score, isEndless ? 'endless' : 'normal')
       setSaved(true)
       await loadScores()
     } catch (e) {
