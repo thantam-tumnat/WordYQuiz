@@ -20,17 +20,17 @@ export async function getVolcabs() {
     .filter((v) => v.word && v.definition)
 }
 
-export async function getHighScores() {
-  const res = await fetch(`${BASE}/score`)
+export async function getHighScores(mode = '') {
+  const res = await fetch(`${BASE}/score?mode=${mode}`)
   if (!res.ok) throw new Error(`GET /score failed: ${res.status}`)
   return (await res.json()) || []
 }
 
-export async function postHighScore(playerName, score) {
+export async function postHighScore(playerName, score, mode = 'normal') {
   const res = await fetch(`${BASE}/score`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ player_name: playerName, score: String(score) }),
+    body: JSON.stringify({ player_name: playerName, score: String(score), mode: mode }),
   })
   if (!res.ok) throw new Error(`POST /score failed: ${res.status}`)
   return res.json()
