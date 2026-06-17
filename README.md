@@ -26,9 +26,9 @@
 ## 📸 WordYQuiz 2.0
 
 <p align="center">
-  <img src="web-v2/docs/screenshots/01-startt.png" width="32%" alt="หน้าเริ่มเกม" />
-  <img src="web-v2/docs/screenshots/02-streakk.png" width="32%" alt="ระบบ streak ติดไฟ" />
-  <img src="web-v2/docs/screenshots/03-resultt.png" width="32%" alt="หน้าสรุปผล + leaderboard" />
+  <img src="web-v2/docs/screenshots/01-startt.jpg" width="32%" alt="หน้าเริ่มเกม" />
+  <img src="web-v2/docs/screenshots/02-streakk.jpg" width="32%" alt="ระบบ streak ติดไฟ" />
+  <img src="web-v2/docs/screenshots/03-resultt.jpg" width="32%" alt="หน้าสรุปผล + leaderboard" />
 </p>
 
 <p align="center">
