@@ -35,7 +35,7 @@ export default function QuizScreen({
     setLocked(true)
     const isCorrect = choice === question.answer
     onAnswer(isCorrect)
-    setTimeout(onNext, isCorrect ? 950 : 1300)
+    setTimeout(() => onNext(isCorrect), isCorrect ? 950 : 1300)
   }
 
   const stateOf = (choice) => {

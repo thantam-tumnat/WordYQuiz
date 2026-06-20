@@ -25,7 +25,6 @@ export default function App() {
   const [correctCount, setCorrectCount] = useState(0)
   const [timeLeft, setTimeLeft] = useState(TIME_LIMIT)
   const [isEndless, setIsEndless] = useState(false)
-  const [lastCorrect, setLastCorrect] = useState(true)
 
   useEffect(() => {
     let alive = true
@@ -47,7 +46,6 @@ export default function App() {
 
   const start = useCallback((endless = false) => {
     setIsEndless(endless)
-    setLastCorrect(true)
     setQuestions(buildQuestions(volcabs, endless ? 100 : QUESTION_COUNT))
     setIndex(0)
     setScore(0)
@@ -58,8 +56,8 @@ export default function App() {
     setStage('playing')
   }, [volcabs])
 
-  const handleNext = useCallback(() => {
-    if (isEndless && !lastCorrect) {
+  const handleNext = useCallback((wasCorrect) => {
+    if (isEndless && wasCorrect === false) {
       setStage('result')
       return
     }
@@ -77,7 +75,7 @@ export default function App() {
       }
       return next
     })
-  }, [questions.length, isEndless, lastCorrect, volcabs])
+  }, [questions.length, isEndless, volcabs])
 
   // ---- countdown timer ----
   // รีเซ็ต timer ทุกครั้งที่เปลี่ยนข้อ
@@ -99,13 +97,11 @@ export default function App() {
     if (stage !== 'playing') return
     if (timeLeft > 0) return
     setStreak(0)
-    setLastCorrect(false)
-    handleNext()
+    handleNext(false)
   }, [timeLeft, stage, handleNext])
 
   const handleAnswer = useCallback(
     (isCorrect) => {
-      setLastCorrect(isCorrect)
       if (isCorrect) {
         const next = streak + 1
         setStreak(next)
