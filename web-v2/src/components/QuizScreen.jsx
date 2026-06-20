@@ -15,25 +15,35 @@ export default function QuizScreen({
   onAnswer,
   onNext,
   isEndless,
+  lives = 0,
+  maxLives = 3,
+  lifeEvery = 5,
 }) {
-  const timerPct = (timeLeft / timeLimit) * 100
-  const timerColor = timeLeft > 5 ? 'ok' : timeLeft >= 3 ? 'warn' : 'danger'
+  const timerPct = Math.max(0, (timeLeft / timeLimit) * 100)
+  const shownTime = Math.max(0, Math.ceil(timeLeft)) // timeLeft เป็นทศนิยม แสดงเป็นวินาทีเต็ม
+  const timerColor = shownTime > 5 ? 'ok' : shownTime >= 3 ? 'warn' : 'danger'
   const [picked, setPicked] = useState(null)
   const [locked, setLocked] = useState(false)
+  const [gain, setGain] = useState(null) // คะแนนที่เพิ่งได้ (โชว์ลอยขึ้นที่ช้อยส์ถูก)
 
   // รีเซ็ตทุกครั้งที่เปลี่ยนข้อ
   useEffect(() => {
     setPicked(null)
     setLocked(false)
+    setGain(null)
   }, [index])
 
   if (!question) return null
+
+  // สีแรงขึ้นตามขนาดรางวัล: เร็ว/combo สูง = ร้อนกว่า
+  const gainTier = (v) => (v >= 1000 ? 'fire' : v >= 600 ? 'good' : 'plain')
 
   const pick = (choice) => {
     if (locked) return
     setPicked(choice)
     setLocked(true)
     const isCorrect = choice === question.answer
+    if (isCorrect) setGain(pointsFor(streak + 1, timeLeft, timeLimit))
     onAnswer(isCorrect)
     setTimeout(() => onNext(isCorrect), isCorrect ? 950 : 1300)
   }
@@ -72,6 +82,41 @@ export default function QuizScreen({
         </div>
       </div>
 
+      {/* ---- lives (โหมด Competitive) ---- */}
+      {isEndless && (
+        <div className="lives-bar">
+          <div className="hearts">
+            <AnimatePresence mode="popLayout" initial={false}>
+              {Array.from({ length: lives }).map((_, i) => (
+                <motion.span
+                  key={i}
+                  className="heart"
+                  initial={{ scale: 0, rotate: -30 }}
+                  animate={{ scale: [0, 1.35, 1], rotate: 0 }}
+                  exit={{ scale: 0, rotate: 35, opacity: 0, x: [0, -5, 5, -3, 0] }}
+                  transition={{ duration: 0.4 }}
+                >
+                  ❤️
+                </motion.span>
+              ))}
+            </AnimatePresence>
+            {Array.from({ length: Math.max(0, maxLives - lives) }).map((_, i) => (
+              <span key={`empty-${i}`} className="heart heart-empty">🤍</span>
+            ))}
+          </div>
+          {lives >= maxLives ? (
+            <span className="life-meter life-meter-max">ชีวิตเต็ม</span>
+          ) : (
+            <span className="life-meter" title="ตอบถูกติดกันเพื่อได้ชีวิตเพิ่ม">
+              {Array.from({ length: lifeEvery }).map((_, n) => (
+                <span key={n} className={`pip ${n < streak % lifeEvery ? 'pip-on' : ''}`} />
+              ))}
+              <span className="life-meter-ico">❤️</span>
+            </span>
+          )}
+        </div>
+      )}
+
       <div className="progress">
         <motion.div
           className="progress-fill"
@@ -86,10 +131,10 @@ export default function QuizScreen({
           <motion.div
             className={`timer-fill ${timerColor}`}
             animate={{ width: `${timerPct}%` }}
-            transition={{ duration: 1, ease: 'linear' }}
+            transition={{ duration: 0.2, ease: 'linear' }}
           />
         </div>
-        <span className={`timer-num ${timerColor}`}>{timeLeft}</span>
+        <span className={`timer-num ${timerColor}`}>{shownTime}</span>
       </div>
 
       {/* ---- question word ---- */}
@@ -110,7 +155,7 @@ export default function QuizScreen({
             )}
           </h2>
           {streak >= 1 && (
-            <span className="bonus-tag">+{pointsFor(streak + 1, timeLeft)} ถ้าตอบถูก</span>
+            <span className="bonus-tag">+{pointsFor(streak + 1, timeLeft, timeLimit)} ถ้าตอบถูก</span>
           )}
         </motion.div>
       </AnimatePresence>
@@ -139,6 +184,18 @@ export default function QuizScreen({
               <span className="choice-text">{choice}</span>
               {st === 'correct' && <span className="choice-mark">✓</span>}
               {st === 'wrong' && <span className="choice-mark">✕</span>}
+              <AnimatePresence>
+                {st === 'correct' && gain != null && (
+                  <motion.span
+                    className={`gain-float gain-${gainTier(gain)}`}
+                    initial={{ opacity: 0, y: 6, scale: 0.6 }}
+                    animate={{ opacity: [0, 1, 1, 0], y: -52, scale: 1 }}
+                    transition={{ duration: 0.8, ease: 'easeOut', times: [0, 0.15, 0.7, 1] }}
+                  >
+                    +{gain}
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </motion.button>
           )
         })}

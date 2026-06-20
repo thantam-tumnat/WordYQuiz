@@ -116,20 +116,7 @@ export default function ResultScreen({ score, total, correctCount, bestStreak, o
 
       <div className="leaderboard">
         <h3 className="lb-title">🏅 อันดับคะแนนสูงสุด</h3>
-        <div className="lb-tabs">
-          <button
-            className={`lb-tab ${viewMode === 'normal' ? 'active' : ''}`}
-            onClick={() => setViewMode('normal')}
-          >
-            Classic 📝
-          </button>
-          <button
-            className={`lb-tab ${viewMode === 'endless' ? 'active' : ''}`}
-            onClick={() => setViewMode('endless')}
-          >
-            Endless ♾️
-          </button>
-        </div>
+        {/* tab Classic ถูกซ่อนชั่วคราว (โหมด Classic ปิดอยู่) เหลือ leaderboard เดียว */}
         {err && <p className="hint">โหลดอันดับไม่ได้: {err}</p>}
         {scores.length === 0 && !err && <p className="hint">ยังไม่มีคะแนน</p>}
         <ol className="lb-list" onScroll={handleScroll}>

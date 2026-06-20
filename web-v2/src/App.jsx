@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { getVolcabs } from './api'
-import { buildQuestions, pointsFor, TIME_LIMIT } from './quiz'
+import { buildQuestions, pointsFor, TIME_LIMIT, timeLimitFor } from './quiz'
 import StartScreen from './components/StartScreen'
 import QuizScreen from './components/QuizScreen'
 import ResultScreen from './components/ResultScreen'
@@ -9,6 +9,9 @@ import LeaderboardScreen from './components/LeaderboardScreen'
 import Embers from './components/Embers'
 
 const QUESTION_COUNT = 10
+const START_LIVES = 1 // เริ่มเกมมีชีวิตเดียว (คงฟีล sudden death ช่วงต้น)
+const MAX_LIVES = 3 // เพดานสะสม: ต่ำไว้ให้แต่ละชีวิตมีค่า + เฉียดตายบ่อย
+const LIFE_EVERY = 5 // ตอบถูกติดครบเท่านี้ = ได้ชีวิตเพิ่ม
 
 export default function App() {
   const [stage, setStage] = useState('start') // start | playing | result
@@ -25,6 +28,10 @@ export default function App() {
   const [correctCount, setCorrectCount] = useState(0)
   const [timeLeft, setTimeLeft] = useState(TIME_LIMIT)
   const [isEndless, setIsEndless] = useState(false)
+  const [lives, setLives] = useState(START_LIVES)
+
+  // เวลาเต็มของข้อปัจจุบัน: Competitive บีบลงเรื่อย ๆ ตามจำนวนข้อ, Classic คงที่ 10 วิ
+  const currentLimit = isEndless ? timeLimitFor(index) : TIME_LIMIT
 
   useEffect(() => {
     let alive = true
@@ -53,13 +60,20 @@ export default function App() {
     setBestStreak(0)
     setCorrectCount(0)
     setTimeLeft(TIME_LIMIT)
+    setLives(START_LIVES)
     setStage('playing')
   }, [volcabs])
 
   const handleNext = useCallback((wasCorrect) => {
+    // โหมด Competitive: ตอบผิด/หมดเวลา = เสีย 1 ชีวิต (ไม่ใช่ตายทันที)
     if (isEndless && wasCorrect === false) {
-      setStage('result')
-      return
+      if (lives <= 1) {
+        setLives(0)
+        setStage('result')
+        return
+      }
+      setLives((lv) => lv - 1)
+      // ยังมีชีวิตเหลือ → เล่นข้อถัดไปต่อ (ตกไปที่ setIndex ด้านล่าง)
     }
     setIndex((i) => {
       const next = i + 1
@@ -75,22 +89,23 @@ export default function App() {
       }
       return next
     })
-  }, [questions.length, isEndless, volcabs])
+  }, [questions.length, isEndless, volcabs, lives])
 
   // ---- countdown timer ----
-  // รีเซ็ต timer ทุกครั้งที่เปลี่ยนข้อ
+  // รีเซ็ต timer ทุกครั้งที่เปลี่ยนข้อ (ใช้เวลาเต็มของข้อนั้น)
   useEffect(() => {
     if (stage !== 'playing') return
-    setTimeLeft(TIME_LIMIT)
-  }, [index, stage])
+    setTimeLeft(currentLimit)
+  }, [index, stage, currentLimit])
 
-  // นับถอยหลังทุกวินาที
+  // นับถอยหลังความละเอียด 0.1 วิ เพื่อให้สเตปครึ่งวินาทีของโหมด Competitive รู้สึกได้จริง
   useEffect(() => {
     if (stage !== 'playing') return
-    if (timeLeft <= 0) return
-    const id = setInterval(() => setTimeLeft((t) => t - 1), 1000)
+    const id = setInterval(() => {
+      setTimeLeft((t) => (t <= 0 ? 0 : Math.round((t - 0.1) * 10) / 10))
+    }, 100)
     return () => clearInterval(id)
-  }, [stage, timeLeft])
+  }, [stage, index])
 
   // หมดเวลา → นับเป็นผิด + ข้ามข้อ
   useEffect(() => {
@@ -106,13 +121,17 @@ export default function App() {
         const next = streak + 1
         setStreak(next)
         setBestStreak((b) => Math.max(b, next))
-        setScore((sc) => sc + pointsFor(next, timeLeft))
+        setScore((sc) => sc + pointsFor(next, timeLeft, currentLimit))
         setCorrectCount((c) => c + 1)
+        // ตอบถูกครบทุก 5 ติด = ได้ชีวิตเพิ่ม (เพดาน MAX_LIVES)
+        if (isEndless && next % LIFE_EVERY === 0) {
+          setLives((lv) => Math.min(MAX_LIVES, lv + 1))
+        }
       } else {
         setStreak(0)
       }
     },
-    [streak, timeLeft]
+    [streak, timeLeft, currentLimit, isEndless]
   )
 
 
@@ -160,10 +179,13 @@ export default function App() {
                 streak={streak}
                 fireLevel={fireLevel}
                 timeLeft={timeLeft}
-                timeLimit={TIME_LIMIT}
+                timeLimit={currentLimit}
                 onAnswer={handleAnswer}
                 onNext={handleNext}
                 isEndless={isEndless}
+                lives={lives}
+                maxLives={MAX_LIVES}
+                lifeEvery={LIFE_EVERY}
               />
             </motion.div>
           )}

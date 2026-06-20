@@ -231,6 +231,30 @@ body {
   background: linear-gradient(120deg, var(--fire-1), var(--fire-2));
 }
 
+/* ---------------- lives (Competitive) ---------------- */
+.lives-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin: 2px 0 10px;
+}
+.hearts { display: flex; align-items: center; gap: 4px; }
+.heart { font-size: 20px; line-height: 1; display: inline-block; }
+.heart-empty { filter: grayscale(1) brightness(1.4); opacity: 0.5; }
+.life-meter { display: flex; align-items: center; gap: 5px; }
+.life-meter .pip {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.life-meter .pip-on {
+  background: var(--fire-2);
+  box-shadow: 0 0 6px rgba(255, 138, 61, 0.7);
+}
+.life-meter-ico { font-size: 13px; margin-left: 2px; }
+.life-meter-max {
+  font-size: 12px; font-weight: 800; color: var(--fire-2);
+  text-shadow: 0 0 8px rgba(255, 138, 61, 0.5);
+}
+
 /* ---------------- choices ---------------- */
 .choices { display: grid; gap: 12px; }
 .choice {
@@ -241,6 +265,7 @@ body {
   border: 1.5px solid var(--glass-brd);
   border-radius: 16px; padding: 16px 18px; cursor: pointer;
   transition: border-color 0.2s, background 0.2s, transform 0.1s;
+  position: relative; /* ยึดตำแหน่งให้ +คะแนนลอยขึ้นจากช้อยส์นี้ */
 }
 .choice:hover { border-color: rgba(168, 130, 255, 0.6); background: rgba(139, 92, 246, 0.12); }
 .choice:disabled { cursor: default; }
@@ -264,6 +289,22 @@ body {
 .choice-wrong .choice-key { background: var(--bad); color: #2a0606; }
 .choice-wrong .choice-mark { color: var(--bad); }
 .choice-dim { opacity: 0.45; }
+
+/* +คะแนนที่ได้ ลอยขึ้นจากช้อยส์ที่ตอบถูก (gaze point) */
+.gain-float {
+  position: absolute; top: 6px; left: 0; right: 0;
+  text-align: center; pointer-events: none; z-index: 5;
+  font-weight: 900; letter-spacing: 0.5px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+}
+.gain-plain { font-size: 22px; color: #ffffff; }
+.gain-good { font-size: 27px; color: var(--fire-2, #ffd479); }
+.gain-fire {
+  font-size: 32px;
+  background: linear-gradient(120deg, var(--fire-1), var(--fire-2));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 0 12px rgba(255, 120, 40, 0.65));
+}
 
 /* ---------------- result ---------------- */
 .result-card { display: flex; flex-direction: column; align-items: center; gap: 4px; }
