@@ -3,7 +3,8 @@ import { motion } from 'framer-motion'
 import { getHighScores } from '../api'
 
 export default function LeaderboardScreen({ onBack }) {
-  const [viewMode, setViewMode] = useState('normal')
+  // โหมด Classic ปิดอยู่ → leaderboard เหลือ Endless อย่างเดียว
+  const [viewMode] = useState('endless')
   const [scores, setScores] = useState([])
   const [loading, setLoading] = useState(false)
   const [err, setErr] = useState(null)
@@ -40,24 +41,11 @@ export default function LeaderboardScreen({ onBack }) {
   return (
     <div className="card result-card">
       <div className="result-emoji">🏆</div>
-      <h2 className="result-title">ทำเนียบคนเก่ง</h2>
-      <p className="subtitle" style={{ marginBottom: '18px' }}>คะแนนสูงสุดของแต่ละโหมด</p>
+      <h2 className="result-title">WordYQuiz Hall of Fame</h2>
+      <p className="subtitle" style={{ marginBottom: '18px' }}>จัดอันดับคะแนนสูงสุด</p>
 
       <div className="leaderboard" style={{ margin: '8px 0 24px' }}>
-        <div className="lb-tabs">
-          <button
-            className={`lb-tab tab-classic ${viewMode === 'normal' ? 'active' : ''}`}
-            onClick={() => setViewMode('normal')}
-          >
-            Classic 📝
-          </button>
-          <button
-            className={`lb-tab tab-endless ${viewMode === 'endless' ? 'active' : ''}`}
-            onClick={() => setViewMode('endless')}
-          >
-            Endless ♾️
-          </button>
-        </div>
+        {/* tab Classic ถูกซ่อน (โหมด Classic ปิดอยู่) เหลือ leaderboard เดียว */}
 
         {loading && <p className="hint pulse" style={{ textAlign: 'center' }}>กำลังดึงข้อมูลคะแนน…</p>}
         {err && <p className="hint" style={{ textAlign: 'center', color: 'var(--bad)' }}>โหลดอันดับไม่ได้: {err}</p>}
