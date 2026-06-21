@@ -12,7 +12,7 @@
 
 
 โปรเจคนี้มี 2 เวอร์ชันหน้าเว็บ ที่ใช้ **backend Go Fiber ตัวเดียวกัน**:
-- **v1.0** — HTML/CSS/JS ล้วน (สร้าง 2023) [เล่น WordYQuizClassic](https://word-y-quiz-v1.vercel.app)
+- **v1.0** — เป็น Demo ที่ใช้ HTML/CSS/JS ล้วน (สร้าง 2023) [เล่น WordYQuizClassic](https://word-y-quiz-v1.vercel.app)
 - **v2.0** — เขียนใหม่ด้วย React (สร้าง 2026) [เล่น WordYQuiz](https://word-y-quiz.vercel.app)
 
 
