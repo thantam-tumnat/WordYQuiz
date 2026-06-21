@@ -29,6 +29,7 @@ export default function App() {
   const [timeLeft, setTimeLeft] = useState(TIME_LIMIT)
   const [isEndless, setIsEndless] = useState(false)
   const [lives, setLives] = useState(START_LIVES)
+  const [answered, setAnswered] = useState(false) // ตอบข้อนี้แล้วหรือยัง — หยุด timer กันเสีย HP ตอนรอข้อใหม่
 
   // เวลาเต็มของข้อปัจจุบัน: Competitive บีบลงเรื่อย ๆ ตามจำนวนข้อ, Classic คงที่ 10 วิ
   const currentLimit = isEndless ? timeLimitFor(index) : TIME_LIMIT
@@ -61,6 +62,7 @@ export default function App() {
     setCorrectCount(0)
     setTimeLeft(TIME_LIMIT)
     setLives(START_LIVES)
+    setAnswered(false)
     setStage('playing')
   }, [volcabs])
 
@@ -92,31 +94,33 @@ export default function App() {
   }, [questions.length, isEndless, volcabs, lives])
 
   // ---- countdown timer ----
-  // รีเซ็ต timer ทุกครั้งที่เปลี่ยนข้อ (ใช้เวลาเต็มของข้อนั้น)
+  // รีเซ็ต timer + ปลดล็อก "ตอบแล้ว" ทุกครั้งที่เปลี่ยนข้อ (timer เริ่มเดินใหม่เมื่อข้อใหม่ขึ้น)
   useEffect(() => {
     if (stage !== 'playing') return
     setTimeLeft(currentLimit)
+    setAnswered(false)
   }, [index, stage, currentLimit])
 
-  // นับถอยหลังความละเอียด 0.1 วิ เพื่อให้สเตปครึ่งวินาทีของโหมด Competitive รู้สึกได้จริง
+  // นับถอยหลังความละเอียด 0.1 วิ — หยุดทันทีเมื่อตอบแล้ว (กันเวลาหมดระหว่างรอข้อใหม่)
   useEffect(() => {
-    if (stage !== 'playing') return
+    if (stage !== 'playing' || answered) return
     const id = setInterval(() => {
       setTimeLeft((t) => (t <= 0 ? 0 : Math.round((t - 0.1) * 10) / 10))
     }, 100)
     return () => clearInterval(id)
-  }, [stage, index])
+  }, [stage, index, answered])
 
-  // หมดเวลา → นับเป็นผิด + ข้ามข้อ
+  // หมดเวลา → นับเป็นผิด + ข้ามข้อ (ข้ามถ้าตอบไปแล้ว เพื่อไม่ให้เสีย HP ทั้งที่ตอบถูก)
   useEffect(() => {
-    if (stage !== 'playing') return
+    if (stage !== 'playing' || answered) return
     if (timeLeft > 0) return
     setStreak(0)
     handleNext(false)
-  }, [timeLeft, stage, handleNext])
+  }, [timeLeft, stage, answered, handleNext])
 
   const handleAnswer = useCallback(
     (isCorrect) => {
+      setAnswered(true) // หยุด timer ทันทีที่ตอบ (ทั้งถูก/ผิด) กันหมดเวลาระหว่างรอข้อใหม่
       if (isCorrect) {
         const next = streak + 1
         setStreak(next)
